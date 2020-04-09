@@ -1,6 +1,6 @@
 # carouselsliderexample
 
-A new Flutter application.
+Carousel slider example application
 
 ## Getting Started
 

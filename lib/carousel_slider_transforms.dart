@@ -162,35 +162,6 @@ class DepthTransform implements SlideTransform {
   }
 }
 
-class DrawFromBackTransform implements SlideTransform {
-  final double startScale;
-
-  DrawFromBackTransform({
-    this.startScale = 0.4,
-  });
-
-  @override
-  Widget transform(BuildContext context, Widget page, int index,
-      int currentPage, double pageDelta, int itemCount) {
-    if (index == currentPage && pageDelta > 0) {
-      final double scale = startScale + (1 - startScale) * (1 - pageDelta);
-      double width = MediaQuery.of(context).size.width;
-      return Transform(
-        alignment: Alignment.center,
-        transform: Matrix4.identity()
-          ..translate(width * pageDelta)
-          ..scale(scale, scale),
-        child: Opacity(
-          opacity: 1 - pageDelta,
-          child: page,
-        ),
-      );
-    } else {
-      return page;
-    }
-  }
-}
-
 class FlipHorizontalTransform implements SlideTransform {
   final double perspectiveScale;
 
