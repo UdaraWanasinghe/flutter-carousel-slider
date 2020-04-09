@@ -232,7 +232,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-//          Center(child: Text("ᴅᴇᴠᴇʟᴏᴘᴇᴅ ʙʏ ᑗᗫᗅᖇᗅ 🧘‍♂️🎶🎵💛🧡")),
+          Center(child: Text("ᴅᴇᴠᴇʟᴏᴘᴇᴅ ʙʏ ᑗᗫᗅᖇᗅ 🧘‍♂️🎶🎵💛🧡")),
           SizedBox(height: 32),
         ],
       ),
