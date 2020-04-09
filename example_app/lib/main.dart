@@ -167,7 +167,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: ListView(
         children: <Widget>[
           Container(
-            height: 500,
+            height: 400,
             child: CarouselSlider(
               key: _sliderKey,
               unlimitedMode: true,
@@ -232,7 +232,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-          Center(child: Text("ᴅᴇᴠᴇʟᴏᴘᴇᴅ ʙʏ ᑗᗫᗅᖇᗅ 🧘‍♂️🎶🎵💛🧡")),
+//          Center(child: Text("ᴅᴇᴠᴇʟᴏᴘᴇᴅ ʙʏ ᑗᗫᗅᖇᗅ 🧘‍♂️🎶🎵💛🧡")),
           SizedBox(height: 32),
         ],
       ),
