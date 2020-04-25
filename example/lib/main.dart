@@ -59,7 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
         children: <Widget>[
           Container(
             height: 500,
-            child: CarouselSlider(
+            child: CarouselSlider.builder(
                 key: _sliderKey,
                 unlimitedMode: true,
                 slideBuilder: (index) {

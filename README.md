@@ -2,7 +2,7 @@
 
 A customizable carousel slider for flutter
 
-[![pub package](https://img.shields.io/badge/pub-v1.0.0-orange)](https://pub.dev/packages/flutter_carousel_slider)
+[![pub package](https://img.shields.io/badge/pub-v1.0.1-orange)](https://pub.dev/packages/flutter_carousel_slider)
 
 ## Screenshots
 
@@ -12,7 +12,7 @@ A customizable carousel slider for flutter
 
 ```
 dependencies:
-  flutter_carousel_slider: ^1.0.0
+  flutter_carousel_slider: ^1.0.1
 ```
 
 ## Demo
@@ -83,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
         children: <Widget>[
           Container(
             height: 500,
-            child: CarouselSlider(
+            child: CarouselSlider.builder(
                 key: _sliderKey,
                 unlimitedMode: true,
                 slideBuilder: (index) {

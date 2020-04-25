@@ -10,6 +10,7 @@ import 'carousel_slider_transforms.dart';
 
 class CarouselSlider extends StatefulWidget {
   final CarouselSlideBuilder slideBuilder;
+  final List<Widget> children;
   final int itemCount;
   final SlideTransform slideTransform;
   final SlideIndicator slideIndicator;
@@ -23,7 +24,7 @@ class CarouselSlider extends StatefulWidget {
   final ScrollPhysics scrollPhysics;
   final Axis scrollDirection;
 
-  CarouselSlider({
+  CarouselSlider.builder({
     Key key,
     @required this.slideBuilder,
     @required this.slideTransform,
@@ -34,11 +35,30 @@ class CarouselSlider extends StatefulWidget {
     this.autoSliderTimeout = const Duration(seconds: 5),
     this.autoSliderTransitionTime = const Duration(seconds: 2),
     this.autoSliderTransitionCurve = Curves.easeOutQuad,
-    this.keepPage = false,
+    this.keepPage = true,
     this.scrollPhysics = const BouncingScrollPhysics(),
     this.scrollDirection = Axis.horizontal,
     this.unlimitedMode = false,
-  }) : super(key: key);
+  })  : children = null,
+        super(key: key);
+
+  CarouselSlider({
+    Key key,
+    @required this.children,
+    @required this.slideTransform,
+    @required this.slideIndicator,
+    this.viewportFraction = 1,
+    this.enableAutoSlider = false,
+    this.autoSliderTimeout = const Duration(seconds: 5),
+    this.autoSliderTransitionTime = const Duration(seconds: 2),
+    this.autoSliderTransitionCurve = Curves.easeOutQuad,
+    this.keepPage = true,
+    this.scrollPhysics = const BouncingScrollPhysics(),
+    this.scrollDirection = Axis.horizontal,
+    this.unlimitedMode = false,
+  })  : slideBuilder = null,
+        itemCount = children.length,
+        super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -89,7 +109,9 @@ class CarouselSliderState extends State<CarouselSlider> {
           physics: widget.scrollPhysics,
           itemBuilder: (context, index) {
             index %= widget.itemCount;
-            Widget slide = widget.slideBuilder(index);
+            Widget slide = widget.children == null
+                ? widget.slideBuilder(index)
+                : widget.children[index];
             return widget.slideTransform.transform(context, slide, index,
                 _currentPage, _pageDelta, widget.itemCount);
           },

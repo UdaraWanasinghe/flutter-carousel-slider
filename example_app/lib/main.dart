@@ -168,7 +168,7 @@ class _MyHomePageState extends State<MyHomePage> {
         children: <Widget>[
           Container(
             height: 400,
-            child: CarouselSlider(
+            child: CarouselSlider.builder(
               key: _sliderKey,
               unlimitedMode: true,
               autoSliderTransitionTime: Duration(seconds: 1),
