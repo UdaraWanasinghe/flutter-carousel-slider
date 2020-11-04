@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'dart:math' as math;
+
+import 'package:flutter/material.dart';
 
 class CubeTransform implements SlideTransform {
   final double perspectiveScale;
@@ -7,7 +8,7 @@ class CubeTransform implements SlideTransform {
   final AlignmentGeometry leftPageAlignment;
   final double rotationAngle;
 
-  CubeTransform({
+  const CubeTransform({
     this.perspectiveScale = 0.0014,
     this.rightPageAlignment = Alignment.centerLeft,
     this.leftPageAlignment = Alignment.centerRight,
@@ -15,8 +16,7 @@ class CubeTransform implements SlideTransform {
   }) : this.rotationAngle = math.pi / 180 * rotationAngle;
 
   @override
-  Widget transform(BuildContext context, Widget page, int index,
-      int currentPage, double pageDelta, int itemCount) {
+  Widget transform(BuildContext context, Widget page, int index, int currentPage, double pageDelta, int itemCount) {
     if (index == currentPage) {
       return Transform(
         alignment: leftPageAlignment,
@@ -51,14 +51,13 @@ class AccordionTransform implements SlideTransform {
   final bool transformRight;
   final bool transformLeft;
 
-  AccordionTransform({
+  const AccordionTransform({
     this.transformRight = true,
     this.transformLeft = true,
   });
 
   @override
-  Widget transform(BuildContext context, Widget page, int index,
-      int currentPage, double pageDelta, int itemCount) {
+  Widget transform(BuildContext context, Widget page, int index, int currentPage, double pageDelta, int itemCount) {
     if (index == currentPage && transformLeft) {
       return Transform(
         alignment: Alignment.centerRight,
@@ -81,15 +80,13 @@ class AccordionTransform implements SlideTransform {
 class BackgroundToForegroundTransform implements SlideTransform {
   final double startScale;
 
-  BackgroundToForegroundTransform({
+  const BackgroundToForegroundTransform({
     this.startScale = 0.4,
   });
 
   @override
-  Widget transform(BuildContext context, Widget page, int index,
-      int currentPage, double pageDelta, int itemCount) {
-    if (index == currentPage + 1 ||
-        currentPage == itemCount - 1 && index == 0) {
+  Widget transform(BuildContext context, Widget page, int index, int currentPage, double pageDelta, int itemCount) {
+    if (index == currentPage + 1 || currentPage == itemCount - 1 && index == 0) {
       final double scale = startScale + (1 - startScale) * pageDelta;
       return Transform(
         alignment: Alignment.center,
@@ -105,13 +102,12 @@ class BackgroundToForegroundTransform implements SlideTransform {
 class ForegroundToBackgroundTransform implements SlideTransform {
   final double endScale;
 
-  ForegroundToBackgroundTransform({
+  const ForegroundToBackgroundTransform({
     this.endScale = 0.4,
   });
 
   @override
-  Widget transform(BuildContext context, Widget page, int index,
-      int currentPage, double pageDelta, int itemCount) {
+  Widget transform(BuildContext context, Widget page, int index, int currentPage, double pageDelta, int itemCount) {
     if (index == currentPage) {
       final double scale = endScale + (1 - endScale) * (1 - pageDelta);
       return Transform(
@@ -127,22 +123,22 @@ class ForegroundToBackgroundTransform implements SlideTransform {
 
 class DefaultTransform implements SlideTransform {
   @override
-  Widget transform(BuildContext context, Widget page, int index,
-      int currentPage, double pageDelta, int itemCount) {
+  Widget transform(BuildContext context, Widget page, int index, int currentPage, double pageDelta, int itemCount) {
     return page;
   }
+
+  const DefaultTransform();
 }
 
 class DepthTransform implements SlideTransform {
   final double startScale;
 
-  DepthTransform({
+  const DepthTransform({
     this.startScale = 0.4,
   });
 
   @override
-  Widget transform(BuildContext context, Widget page, int index,
-      int currentPage, double pageDelta, int itemCount) {
+  Widget transform(BuildContext context, Widget page, int index, int currentPage, double pageDelta, int itemCount) {
     if (index == currentPage) {
       final double scale = startScale + (1 - startScale) * (1 - pageDelta);
       double width = MediaQuery.of(context).size.width;
@@ -165,17 +161,14 @@ class DepthTransform implements SlideTransform {
 class FlipHorizontalTransform implements SlideTransform {
   final double perspectiveScale;
 
-  FlipHorizontalTransform({
+  const FlipHorizontalTransform({
     this.perspectiveScale = 0.002,
   });
 
   @override
-  Widget transform(BuildContext context, Widget page, int index,
-      int currentPage, double pageDelta, int itemCount) {
+  Widget transform(BuildContext context, Widget page, int index, int currentPage, double pageDelta, int itemCount) {
     final double width = MediaQuery.of(context).size.width;
-    if ((index == currentPage + 1 ||
-            index == 0 && currentPage == itemCount - 1) &&
-        pageDelta > 0.5) {
+    if ((index == currentPage + 1 || index == 0 && currentPage == itemCount - 1) && pageDelta > 0.5) {
       return Transform(
         alignment: Alignment.center,
         child: page,
@@ -202,17 +195,14 @@ class FlipHorizontalTransform implements SlideTransform {
 class FlipVerticalTransform implements SlideTransform {
   final double perspectiveScale;
 
-  FlipVerticalTransform({
+  const FlipVerticalTransform({
     this.perspectiveScale = 0.002,
   });
 
   @override
-  Widget transform(BuildContext context, Widget page, int index,
-      int currentPage, double pageDelta, int itemCount) {
+  Widget transform(BuildContext context, Widget page, int index, int currentPage, double pageDelta, int itemCount) {
     final double width = MediaQuery.of(context).size.width;
-    if ((index == currentPage + 1 ||
-            index == 0 && currentPage == itemCount - 1) &&
-        pageDelta > 0.5) {
+    if ((index == currentPage + 1 || index == 0 && currentPage == itemCount - 1) && pageDelta > 0.5) {
       return Transform(
         alignment: Alignment.center,
         child: page,
@@ -239,15 +229,13 @@ class FlipVerticalTransform implements SlideTransform {
 class ParallaxTransform implements SlideTransform {
   final double clipAmount;
 
-  ParallaxTransform({
+  const ParallaxTransform({
     this.clipAmount = 200,
   });
 
   @override
-  Widget transform(BuildContext context, Widget page, int index,
-      int currentPage, double pageDelta, int itemCount) {
-    if (index == currentPage + 1 ||
-        index == 0 && currentPage == itemCount - 1) {
+  Widget transform(BuildContext context, Widget page, int index, int currentPage, double pageDelta, int itemCount) {
+    if (index == currentPage + 1 || index == 0 && currentPage == itemCount - 1) {
       return Transform.translate(
         offset: Offset(-clipAmount * (1 - pageDelta), 0),
         child: ClipRect(
@@ -264,7 +252,7 @@ class ParallaxTransform implements SlideTransform {
 class RectClipper extends CustomClipper<Rect> {
   final double leftClip;
 
-  RectClipper(this.leftClip);
+  const RectClipper(this.leftClip);
 
   @override
   Rect getClip(Size size) {
@@ -279,8 +267,7 @@ class RectClipper extends CustomClipper<Rect> {
 
 class StackTransform implements SlideTransform {
   @override
-  Widget transform(BuildContext context, Widget page, int index,
-      int currentPage, double pageDelta, int itemCount) {
+  Widget transform(BuildContext context, Widget page, int index, int currentPage, double pageDelta, int itemCount) {
     if (index == currentPage) {
       double width = MediaQuery.of(context).size.width;
       return Transform(
@@ -295,8 +282,7 @@ class StackTransform implements SlideTransform {
 
 class TabletTransform implements SlideTransform {
   @override
-  Widget transform(BuildContext context, Widget page, int index,
-      int currentPage, double pageDelta, int itemCount) {
+  Widget transform(BuildContext context, Widget page, int index, int currentPage, double pageDelta, int itemCount) {
     if (index == currentPage) {
       return Transform(
         alignment: Alignment.center,
@@ -305,8 +291,7 @@ class TabletTransform implements SlideTransform {
           ..setEntry(3, 2, 0.002)
           ..rotateY(-math.pi / 4 * pageDelta),
       );
-    } else if (index == currentPage + 1 ||
-        index == 0 && currentPage == itemCount - 1) {
+    } else if (index == currentPage + 1 || index == 0 && currentPage == itemCount - 1) {
       return Transform(
         alignment: Alignment.center,
         child: page,
@@ -318,26 +303,26 @@ class TabletTransform implements SlideTransform {
       return Container();
     }
   }
+
+  const TabletTransform();
 }
 
 class RotateDownTransform implements SlideTransform {
   final double rotationAngle;
 
-  RotateDownTransform({
+  const RotateDownTransform({
     double rotationAngle = 45,
   }) : this.rotationAngle = math.pi / 180 * rotationAngle;
 
   @override
-  Widget transform(BuildContext context, Widget page, int index,
-      int currentPage, double pageDelta, int itemCount) {
+  Widget transform(BuildContext context, Widget page, int index, int currentPage, double pageDelta, int itemCount) {
     if (index == currentPage) {
       return Transform(
         alignment: Alignment.bottomCenter,
         child: page,
         transform: Matrix4.identity()..rotateZ(-rotationAngle * pageDelta),
       );
-    } else if (index == currentPage + 1 ||
-        index == 0 && currentPage == itemCount - 1) {
+    } else if (index == currentPage + 1 || index == 0 && currentPage == itemCount - 1) {
       return Transform(
         alignment: Alignment.bottomCenter,
         child: page,
@@ -352,26 +337,23 @@ class RotateDownTransform implements SlideTransform {
 class RotateUpTransform implements SlideTransform {
   final double rotationAngle;
 
-  RotateUpTransform({
+  const RotateUpTransform({
     double rotationAngle = 45,
   }) : this.rotationAngle = math.pi / 180 * rotationAngle;
 
   @override
-  Widget transform(BuildContext context, Widget page, int index,
-      int currentPage, double pageDelta, int itemCount) {
+  Widget transform(BuildContext context, Widget page, int index, int currentPage, double pageDelta, int itemCount) {
     if (index == currentPage) {
       return Transform(
         alignment: Alignment.topCenter,
         child: page,
         transform: Matrix4.identity()..rotateZ(rotationAngle * pageDelta),
       );
-    } else if (index == currentPage + 1 ||
-        index == 0 && currentPage == itemCount - 1) {
+    } else if (index == currentPage + 1 || index == 0 && currentPage == itemCount - 1) {
       return Transform(
         alignment: Alignment.topCenter,
         child: page,
-        transform: Matrix4.identity()
-          ..rotateZ(-rotationAngle * (1 - pageDelta)),
+        transform: Matrix4.identity()..rotateZ(-rotationAngle * (1 - pageDelta)),
       );
     } else {
       return Container();
@@ -383,28 +365,22 @@ class ZoomOutSlideTransform implements SlideTransform {
   final double zoomOutScale;
   final bool enableOpacity;
 
-  ZoomOutSlideTransform({
+  const ZoomOutSlideTransform({
     this.zoomOutScale = 0.8,
     this.enableOpacity = true,
   });
 
   @override
-  Widget transform(BuildContext context, Widget page, int index,
-      int currentPage, double pageDelta, int itemCount) {
+  Widget transform(BuildContext context, Widget page, int index, int currentPage, double pageDelta, int itemCount) {
     if (index == currentPage) {
-      double scale = 1 - pageDelta < zoomOutScale
-          ? zoomOutScale
-          : zoomOutScale + ((1 - pageDelta) - zoomOutScale);
+      double scale = 1 - pageDelta < zoomOutScale ? zoomOutScale : zoomOutScale + ((1 - pageDelta) - zoomOutScale);
       return Transform(
         alignment: Alignment.center,
         child: enableOpacity ? Opacity(opacity: scale, child: page) : page,
         transform: Matrix4.identity()..scale(scale, scale),
       );
-    } else if (index == currentPage + 1 ||
-        index == 0 && currentPage == itemCount - 1) {
-      double scale = pageDelta < zoomOutScale
-          ? zoomOutScale
-          : zoomOutScale + (pageDelta - zoomOutScale);
+    } else if (index == currentPage + 1 || index == 0 && currentPage == itemCount - 1) {
+      double scale = pageDelta < zoomOutScale ? zoomOutScale : zoomOutScale + (pageDelta - zoomOutScale);
       return Transform(
         alignment: Alignment.center,
         child: enableOpacity ? Opacity(opacity: scale, child: page) : page,
@@ -417,6 +393,5 @@ class ZoomOutSlideTransform implements SlideTransform {
 }
 
 abstract class SlideTransform {
-  Widget transform(BuildContext context, Widget page, int index,
-      int currentPage, double pageDelta, int itemCount);
+  Widget transform(BuildContext context, Widget page, int index, int currentPage, double pageDelta, int itemCount);
 }

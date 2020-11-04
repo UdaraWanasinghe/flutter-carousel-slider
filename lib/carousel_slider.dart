@@ -23,13 +23,14 @@ class CarouselSlider extends StatefulWidget {
   final bool keepPage;
   final ScrollPhysics scrollPhysics;
   final Axis scrollDirection;
+  final int initialPage;
 
   CarouselSlider.builder({
     Key key,
     @required this.slideBuilder,
-    @required this.slideTransform,
-    @required this.slideIndicator,
-    @required this.itemCount,
+    this.slideTransform = const DefaultTransform(),
+    this.slideIndicator,
+    this.itemCount,
     this.viewportFraction = 1,
     this.enableAutoSlider = false,
     this.autoSliderTimeout = const Duration(seconds: 5),
@@ -39,14 +40,15 @@ class CarouselSlider extends StatefulWidget {
     this.scrollPhysics = const BouncingScrollPhysics(),
     this.scrollDirection = Axis.horizontal,
     this.unlimitedMode = false,
+    this.initialPage = 0,
   })  : children = null,
         super(key: key);
 
   CarouselSlider({
     Key key,
     @required this.children,
-    @required this.slideTransform,
-    @required this.slideIndicator,
+    this.slideTransform = const DefaultTransform(),
+    this.slideIndicator,
     this.viewportFraction = 1,
     this.enableAutoSlider = false,
     this.autoSliderTimeout = const Duration(seconds: 5),
@@ -56,6 +58,7 @@ class CarouselSlider extends StatefulWidget {
     this.scrollPhysics = const BouncingScrollPhysics(),
     this.scrollDirection = Axis.horizontal,
     this.unlimitedMode = false,
+    this.initialPage = 0,
   })  : slideBuilder = null,
         itemCount = children.length,
         super(key: key);
@@ -69,7 +72,7 @@ class CarouselSlider extends StatefulWidget {
 class CarouselSliderState extends State<CarouselSlider> {
   PageController _pageController;
   Timer _timer;
-  int _currentPage = 0;
+  int _currentPage;
   double _pageDelta = 0;
   bool _isPlaying;
 
@@ -78,9 +81,11 @@ class CarouselSliderState extends State<CarouselSlider> {
   @override
   void initState() {
     super.initState();
+    _currentPage = widget.initialPage;
     _pageController = new PageController(
       viewportFraction: widget.viewportFraction,
       keepPage: widget.keepPage,
+      initialPage: widget.initialPage,
     );
     if (_isPlaying) {
       _timer = Timer.periodic(widget.autoSliderTimeout, (timer) {
@@ -108,15 +113,12 @@ class CarouselSliderState extends State<CarouselSlider> {
           scrollDirection: widget.scrollDirection,
           physics: widget.scrollPhysics,
           itemBuilder: (context, index) {
-            index %= widget.itemCount;
-            Widget slide = widget.children == null
-                ? widget.slideBuilder(index)
-                : widget.children[index];
-            return widget.slideTransform.transform(context, slide, index,
-                _currentPage, _pageDelta, widget.itemCount);
+            if (widget.itemCount != null) index %= widget.itemCount;
+            Widget slide = widget.children == null ? widget.slideBuilder(index) : widget.children[index];
+            return widget.slideTransform.transform(context, slide, index, _currentPage, _pageDelta, widget.itemCount);
           },
         ),
-        widget.slideIndicator.build(_currentPage, _pageDelta, widget.itemCount),
+        if (widget.slideIndicator != null) widget.slideIndicator.build(_currentPage, _pageDelta, widget.itemCount),
       ],
     );
   }

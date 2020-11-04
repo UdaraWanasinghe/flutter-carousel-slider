@@ -80,40 +80,20 @@ class _MyHomePageState extends State<MyHomePage> {
                         return Column(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            _getTransformRadio(
-                                Transforms.CubeTransform, _transform, setState),
-                            _getTransformRadio(Transforms.ZoomOutSlideTransform,
-                                _transform, setState),
-                            _getTransformRadio(Transforms.RotateUpTransform,
-                                _transform, setState),
-                            _getTransformRadio(Transforms.RotateDownTransform,
-                                _transform, setState),
-                            _getTransformRadio(Transforms.TabletTransform,
-                                _transform, setState),
-                            _getTransformRadio(Transforms.StackTransform,
-                                _transform, setState),
-                            _getTransformRadio(Transforms.ParallaxTransform,
-                                _transform, setState),
-                            _getTransformRadio(
-                                Transforms.ForegroundToBackgroundTransform,
-                                _transform,
-                                setState),
-                            _getTransformRadio(Transforms.FlipVerticalTransform,
-                                _transform, setState),
-                            _getTransformRadio(Transforms.DepthTransform,
-                                _transform, setState),
-                            _getTransformRadio(
-                                Transforms.BackgroundToForegroundTransform,
-                                _transform,
-                                setState),
-                            _getTransformRadio(Transforms.AccordionTransform,
-                                _transform, setState),
-                            _getTransformRadio(Transforms.DefaultTransform,
-                                _transform, setState),
-                            _getTransformRadio(
-                                Transforms.FlipHorizontalTransform,
-                                _transform,
-                                setState),
+                            _getTransformRadio(Transforms.CubeTransform, _transform, setState),
+                            _getTransformRadio(Transforms.ZoomOutSlideTransform, _transform, setState),
+                            _getTransformRadio(Transforms.RotateUpTransform, _transform, setState),
+                            _getTransformRadio(Transforms.RotateDownTransform, _transform, setState),
+                            _getTransformRadio(Transforms.TabletTransform, _transform, setState),
+                            _getTransformRadio(Transforms.StackTransform, _transform, setState),
+                            _getTransformRadio(Transforms.ParallaxTransform, _transform, setState),
+                            _getTransformRadio(Transforms.ForegroundToBackgroundTransform, _transform, setState),
+                            _getTransformRadio(Transforms.FlipVerticalTransform, _transform, setState),
+                            _getTransformRadio(Transforms.DepthTransform, _transform, setState),
+                            _getTransformRadio(Transforms.BackgroundToForegroundTransform, _transform, setState),
+                            _getTransformRadio(Transforms.AccordionTransform, _transform, setState),
+                            _getTransformRadio(Transforms.DefaultTransform, _transform, setState),
+                            _getTransformRadio(Transforms.FlipHorizontalTransform, _transform, setState),
                           ],
                         );
                       },
@@ -137,22 +117,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       builder: (context, setState) {
                         return Column(
                           children: <Widget>[
-                            _getIndicatorRadio(
-                                Indicators.CircularSlideIndicator,
-                                _indicator,
-                                setState),
-                            _getIndicatorRadio(
-                                Indicators.CircularWaveSlideIndicator,
-                                _indicator,
-                                setState),
-                            _getIndicatorRadio(
-                                Indicators.CircularStaticIndicator,
-                                _indicator,
-                                setState),
-                            _getIndicatorRadio(
-                                Indicators.SequentialFillIndicator,
-                                _indicator,
-                                setState),
+                            _getIndicatorRadio(Indicators.CircularSlideIndicator, _indicator, setState),
+                            _getIndicatorRadio(Indicators.CircularWaveSlideIndicator, _indicator, setState),
+                            _getIndicatorRadio(Indicators.CircularStaticIndicator, _indicator, setState),
+                            _getIndicatorRadio(Indicators.SequentialFillIndicator, _indicator, setState),
                           ],
                         );
                       },
@@ -164,11 +132,12 @@ class _MyHomePageState extends State<MyHomePage> {
           )
         ],
       ),
-      body: ListView(
+      body: Column(
         children: <Widget>[
           Container(
             height: 400,
             child: CarouselSlider.builder(
+              initialPage: 3,
               key: _sliderKey,
               unlimitedMode: true,
               autoSliderTransitionTime: Duration(seconds: 1),
@@ -208,9 +177,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   IconButton(
                     iconSize: 64,
                     icon: Icon(
-                      _isPlaying
-                          ? Icons.pause_circle_outline
-                          : Icons.play_circle_outline,
+                      _isPlaying ? Icons.pause_circle_outline : Icons.play_circle_outline,
                     ),
                     onPressed: () {
                       setState(
