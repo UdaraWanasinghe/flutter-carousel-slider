@@ -66,7 +66,7 @@ class CircularIndicatorPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final dx = ((size.width - 2 * radius) / (itemCount - 1));
+    final dx = 2 * ((size.width - 2 * radius) / itemCount);
     final y = size.height / 2;
     double x = radius;
     for (int i = 0; i < itemCount; i++) {
@@ -166,7 +166,7 @@ class CircularWaveIndicatorPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final dx = ((size.width - 2 * radius) / (itemCount - 1));
+    final dx = 2 * ((size.width - 2 * radius) / itemCount);
     final y = size.height / 2;
     double x = radius;
     for (int i = 0; i < itemCount; i++) {
@@ -270,7 +270,7 @@ class CircularStaticIndicatorPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final dx = ((size.width - 2 * radius) / (itemCount - 1));
+    final dx = 2 * ((size.width - 2 * radius) / itemCount);
     final y = size.height / 2;
     double x = radius;
     for (int i = 0; i < itemCount; i++) {
@@ -368,7 +368,7 @@ class SequentialFillIndicatorPainter extends CustomPainter {
     if (this.currentPage + pageDelta > itemCount - 1) {
       currentPage = 0;
     }
-    final dx = ((size.width - 2 * radius) / (itemCount - 1));
+    final dx = 2 * ((size.width - 2 * radius) / itemCount);
     final y = size.height / 2;
     double x = radius;
     for (int i = 0; i < itemCount; i++) {
