@@ -30,7 +30,7 @@ class CarouselSlider extends StatefulWidget {
     @required this.slideBuilder,
     this.slideTransform = const DefaultTransform(),
     this.slideIndicator,
-    this.itemCount,
+    @required this.itemCount,
     this.viewportFraction = 1,
     this.enableAutoSlider = false,
     this.autoSliderTimeout = const Duration(seconds: 5),
@@ -118,7 +118,8 @@ class CarouselSliderState extends State<CarouselSlider> {
             return widget.slideTransform.transform(context, slide, index, _currentPage, _pageDelta, widget.itemCount);
           },
         ),
-        if (widget.slideIndicator != null) widget.slideIndicator.build(_currentPage, _pageDelta, widget.itemCount),
+        if (widget.slideIndicator != null && widget.itemCount > 0)
+          widget.slideIndicator.build(_currentPage, _pageDelta, widget.itemCount),
       ],
     );
   }
