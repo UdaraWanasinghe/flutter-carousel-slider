@@ -60,23 +60,24 @@ class _MyHomePageState extends State<MyHomePage> {
           Container(
             height: 500,
             child: CarouselSlider.builder(
-                key: _sliderKey,
-                unlimitedMode: true,
-                slideBuilder: (index) {
-                  return Container(
-                    alignment: Alignment.center,
-                    color: colors[index],
-                    child: Text(
-                      letters[index],
-                      style: TextStyle(fontSize: 200, color: Colors.white),
-                    ),
-                  );
-                },
-                slideTransform: CubeTransform(),
-                slideIndicator: CircularSlideIndicator(
-                  padding: EdgeInsets.only(bottom: 32),
-                ),
-                itemCount: colors.length),
+              key: _sliderKey,
+              unlimitedMode: true,
+              slideBuilder: (index) {
+                return Container(
+                  alignment: Alignment.center,
+                  color: colors[index],
+                  child: Text(
+                    letters[index],
+                    style: TextStyle(fontSize: 200, color: Colors.white),
+                  ),
+                );
+              },
+              slideTransform: CubeTransform(),
+              slideIndicator: CircularSlideIndicator(
+                padding: EdgeInsets.only(bottom: 32),
+              ),
+              itemCount: 1,
+            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 32),
@@ -96,9 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     IconButton(
                       iconSize: 64,
                       icon: Icon(
-                        _isPlaying
-                            ? Icons.pause_circle_outline
-                            : Icons.play_circle_outline,
+                        _isPlaying ? Icons.pause_circle_outline : Icons.play_circle_outline,
                       ),
                       onPressed: () {
                         setState(

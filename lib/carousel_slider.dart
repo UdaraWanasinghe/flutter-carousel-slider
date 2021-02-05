@@ -108,12 +108,16 @@ class CarouselSliderState extends State<CarouselSlider> {
     return Stack(
       children: <Widget>[
         PageView.builder(
-          itemCount: widget.unlimitedMode ? null : widget.itemCount,
+          itemCount: widget.unlimitedMode
+              ? widget.itemCount > 0
+                  ? null
+                  : 0
+              : widget.itemCount,
           controller: _pageController,
           scrollDirection: widget.scrollDirection,
           physics: widget.scrollPhysics,
           itemBuilder: (context, index) {
-            if (widget.itemCount != null) index %= widget.itemCount;
+            index %= widget.itemCount;
             Widget slide = widget.children == null ? widget.slideBuilder(index) : widget.children[index];
             return widget.slideTransform.transform(context, slide, index, _currentPage, _pageDelta, widget.itemCount);
           },
