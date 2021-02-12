@@ -51,7 +51,14 @@ class _MyHomePageState extends State<MyHomePage> {
   ];
 
   bool _isPlaying = false;
-  GlobalKey<CarouselSliderState> _sliderKey = GlobalKey();
+
+  CarouselSliderController _sliderController;
+
+  @override
+  void initState() {
+    super.initState();
+    _sliderController = CarouselSliderController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,23 +71,26 @@ class _MyHomePageState extends State<MyHomePage> {
           Container(
             height: 500,
             child: CarouselSlider.builder(
-                key: _sliderKey,
-                unlimitedMode: true,
-                slideBuilder: (index) {
-                  return Container(
-                    alignment: Alignment.center,
-                    color: colors[index],
-                    child: Text(
-                      letters[index],
-                      style: TextStyle(fontSize: 200, color: Colors.white),
-                    ),
-                  );
-                },
-                slideTransform: CubeTransform(),
-                slideIndicator: CircularSlideIndicator(
-                  padding: EdgeInsets.only(bottom: 32),
-                ),
-                itemCount: colors.length),
+              unlimitedMode: true,
+              controller: _sliderController,
+              slideBuilder: (index) {
+                return Container(
+                  alignment: Alignment.center,
+                  color: colors[index],
+                  child: Text(
+                    letters[index],
+                    style: TextStyle(fontSize: 200, color: Colors.white),
+                  ),
+                );
+              },
+              slideTransform: CubeTransform(),
+              slideIndicator: CircularSlideIndicator(
+                padding: EdgeInsets.only(bottom: 32),
+              ),
+              itemCount: colors.length,
+              initialPage: 0,
+              enableAutoSlider: true,
+            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 32),
@@ -94,21 +104,19 @@ class _MyHomePageState extends State<MyHomePage> {
                       iconSize: 48,
                       icon: Icon(Icons.skip_previous),
                       onPressed: () {
-                        _sliderKey.currentState.previousPage();
+                        _sliderController.previousPage();
                       },
                     ),
                     IconButton(
                       iconSize: 64,
                       icon: Icon(
-                        _isPlaying
-                            ? Icons.pause_circle_outline
-                            : Icons.play_circle_outline,
+                        _isPlaying ? Icons.pause_circle_outline : Icons.play_circle_outline,
                       ),
                       onPressed: () {
                         setState(
                           () {
                             _isPlaying = !_isPlaying;
-                            _sliderKey.currentState.setPlaying(_isPlaying);
+                            _sliderController.setAutoSliderEnabled(_isPlaying);
                           },
                         );
                       },
@@ -117,7 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       iconSize: 48,
                       icon: Icon(Icons.skip_next),
                       onPressed: () {
-                        _sliderKey.currentState.nextPage();
+                        _sliderController.nextPage();
                       },
                     ),
                   ],
