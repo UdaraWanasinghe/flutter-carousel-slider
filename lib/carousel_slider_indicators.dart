@@ -82,7 +82,7 @@ class CircularIndicatorPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final dx = ((size.width - 2 * radius) / (itemCount - 1));
+    final dx = itemCount < 2 ? size.width : (size.width - 2 * radius) / (itemCount - 1);
     final y = size.height / 2;
     double x = radius;
 
@@ -105,20 +105,15 @@ class CircularIndicatorPainter extends CustomPainter {
     double midX = radius + dx * currentPage;
     double midY = size.height / 2;
     final path = Path();
-    path.addOval(Rect.fromLTRB(
-        midX - radius, midY - radius, midX + radius, midY + radius));
-
+    path.addOval(Rect.fromLTRB(midX - radius, midY - radius, midX + radius, midY + radius));
     if (currentPage == itemCount - 1) {
       path.addOval(Rect.fromLTRB(0, midY - radius, 2 * radius, midY + radius));
       canvas.clipPath(path);
-      canvas.drawCircle(Offset(2 * radius * pageDelta - radius, midY), radius,
-          currentIndicatorPaint);
-
+      canvas.drawCircle(Offset(2 * radius * pageDelta - radius, midY), radius, currentIndicatorPaint);
       midX += 2 * radius * pageDelta;
     } else {
       midX += dx;
-      path.addOval(Rect.fromLTRB(
-          midX - radius, midY - radius, midX + radius, midY + radius));
+      path.addOval(Rect.fromLTRB(midX - radius, midY - radius, midX + radius, midY + radius));
       midX -= dx;
       canvas.clipPath(path);
       midX += dx * pageDelta;
@@ -199,7 +194,7 @@ class CircularWaveIndicatorPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final dx = ((size.width - 2 * radius) / (itemCount - 1));
+    final dx = itemCount < 2 ? size.width : (size.width - 2 * radius) / (itemCount - 1);
     final y = size.height / 2;
     double x = radius;
     for (int i = 0; i < itemCount; i++) {
@@ -213,11 +208,9 @@ class CircularWaveIndicatorPainter extends CustomPainter {
       canvas.save();
       final path = Path();
       path.addOval(Rect.fromLTRB(0, midY - radius, 2 * radius, midY + radius));
-      path.addOval(Rect.fromLTRB(
-          size.width - 2 * radius, midY - radius, size.width, midY + radius));
+      path.addOval(Rect.fromLTRB(size.width - 2 * radius, midY - radius, size.width, midY + radius));
       canvas.clipPath(path);
-      canvas.drawCircle(Offset(2 * radius * pageDelta - radius, midY), r,
-          currentIndicatorPaint);
+      canvas.drawCircle(Offset(2 * radius * pageDelta - radius, midY), r, currentIndicatorPaint);
       midX += 2 * radius * pageDelta;
     } else {
       midX += dx * pageDelta;
@@ -305,23 +298,16 @@ class CircularStaticIndicatorPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final dx = ((size.width - 2 * radius) / (itemCount - 1));
+    final dx = itemCount < 2 ? size.width : (size.width - 2 * radius) / (itemCount - 1);
     final y = size.height / 2;
     double x = radius;
     for (int i = 0; i < itemCount; i++) {
       canvas.drawCircle(Offset(x, y), radius, indicatorPaint);
       if (i == currentPage) {
-        canvas.drawCircle(
-            Offset(x, y),
-            enableAnimation ? radius - radius * pageDelta : radius,
-            currentIndicatorPaint);
+        canvas.drawCircle(Offset(x, y), enableAnimation ? radius - radius * pageDelta : radius, currentIndicatorPaint);
       }
-      if (enableAnimation &&
-          (i == currentPage + 1 || currentPage == itemCount - 1 && i == 0)) {
-        canvas.drawCircle(
-            Offset(x, y),
-            enableAnimation ? radius * pageDelta : radius,
-            currentIndicatorPaint);
+      if (enableAnimation && (i == currentPage + 1 || currentPage == itemCount - 1 && i == 0)) {
+        canvas.drawCircle(Offset(x, y), enableAnimation ? radius * pageDelta : radius, currentIndicatorPaint);
       }
       x += dx;
     }
@@ -410,7 +396,7 @@ class SequentialFillIndicatorPainter extends CustomPainter {
     if (this.currentPage + pageDelta > itemCount - 1) {
       currentPage = 0;
     }
-    final dx = ((size.width - 2 * radius) / (itemCount - 1));
+    final dx = itemCount < 2 ? size.width : (size.width - 2 * radius) / (itemCount - 1);
     final y = size.height / 2;
     double x = radius;
     for (int i = 0; i < itemCount; i++) {
@@ -428,14 +414,9 @@ class SequentialFillIndicatorPainter extends CustomPainter {
     x = radius;
     if (this.currentPage + pageDelta > itemCount - 1) {
       canvas.drawLine(
-          Offset(-radius, y),
-          Offset(dx * currentPage + radius * 2 * pageDelta - radius, y),
-          currentIndicatorPaint);
+          Offset(-radius, y), Offset(dx * currentPage + radius * 2 * pageDelta - radius, y), currentIndicatorPaint);
     } else {
-      canvas.drawLine(
-          Offset(-radius, y),
-          Offset(dx * currentPage + dx * pageDelta + radius, y),
-          currentIndicatorPaint);
+      canvas.drawLine(Offset(-radius, y), Offset(dx * currentPage + dx * pageDelta + radius, y), currentIndicatorPaint);
     }
     canvas.restore();
   }

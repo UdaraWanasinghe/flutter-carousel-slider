@@ -55,7 +55,13 @@ class _MyHomePageState extends State<MyHomePage> {
     padding: EdgeInsets.only(bottom: 32),
   );
   bool _isPlaying = false;
-  GlobalKey<CarouselSliderState> _sliderKey = GlobalKey<CarouselSliderState>();
+  CarouselSliderController _sliderController;
+
+  @override
+  void initState() {
+    super.initState();
+    _sliderController = CarouselSliderController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,40 +86,20 @@ class _MyHomePageState extends State<MyHomePage> {
                         return Column(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            _getTransformRadio(
-                                Transforms.CubeTransform, _transform, setState),
-                            _getTransformRadio(Transforms.ZoomOutSlideTransform,
-                                _transform, setState),
-                            _getTransformRadio(Transforms.RotateUpTransform,
-                                _transform, setState),
-                            _getTransformRadio(Transforms.RotateDownTransform,
-                                _transform, setState),
-                            _getTransformRadio(Transforms.TabletTransform,
-                                _transform, setState),
-                            _getTransformRadio(Transforms.StackTransform,
-                                _transform, setState),
-                            _getTransformRadio(Transforms.ParallaxTransform,
-                                _transform, setState),
-                            _getTransformRadio(
-                                Transforms.ForegroundToBackgroundTransform,
-                                _transform,
-                                setState),
-                            _getTransformRadio(Transforms.FlipVerticalTransform,
-                                _transform, setState),
-                            _getTransformRadio(Transforms.DepthTransform,
-                                _transform, setState),
-                            _getTransformRadio(
-                                Transforms.BackgroundToForegroundTransform,
-                                _transform,
-                                setState),
-                            _getTransformRadio(Transforms.AccordionTransform,
-                                _transform, setState),
-                            _getTransformRadio(Transforms.DefaultTransform,
-                                _transform, setState),
-                            _getTransformRadio(
-                                Transforms.FlipHorizontalTransform,
-                                _transform,
-                                setState),
+                            _getTransformRadio(Transforms.CubeTransform, _transform, setState),
+                            _getTransformRadio(Transforms.ZoomOutSlideTransform, _transform, setState),
+                            _getTransformRadio(Transforms.RotateUpTransform, _transform, setState),
+                            _getTransformRadio(Transforms.RotateDownTransform, _transform, setState),
+                            _getTransformRadio(Transforms.TabletTransform, _transform, setState),
+                            _getTransformRadio(Transforms.StackTransform, _transform, setState),
+                            _getTransformRadio(Transforms.ParallaxTransform, _transform, setState),
+                            _getTransformRadio(Transforms.ForegroundToBackgroundTransform, _transform, setState),
+                            _getTransformRadio(Transforms.FlipVerticalTransform, _transform, setState),
+                            _getTransformRadio(Transforms.DepthTransform, _transform, setState),
+                            _getTransformRadio(Transforms.BackgroundToForegroundTransform, _transform, setState),
+                            _getTransformRadio(Transforms.AccordionTransform, _transform, setState),
+                            _getTransformRadio(Transforms.DefaultTransform, _transform, setState),
+                            _getTransformRadio(Transforms.FlipHorizontalTransform, _transform, setState),
                           ],
                         );
                       },
@@ -137,22 +123,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       builder: (context, setState) {
                         return Column(
                           children: <Widget>[
-                            _getIndicatorRadio(
-                                Indicators.CircularSlideIndicator,
-                                _indicator,
-                                setState),
-                            _getIndicatorRadio(
-                                Indicators.CircularWaveSlideIndicator,
-                                _indicator,
-                                setState),
-                            _getIndicatorRadio(
-                                Indicators.CircularStaticIndicator,
-                                _indicator,
-                                setState),
-                            _getIndicatorRadio(
-                                Indicators.SequentialFillIndicator,
-                                _indicator,
-                                setState),
+                            _getIndicatorRadio(Indicators.CircularSlideIndicator, _indicator, setState),
+                            _getIndicatorRadio(Indicators.CircularWaveSlideIndicator, _indicator, setState),
+                            _getIndicatorRadio(Indicators.CircularStaticIndicator, _indicator, setState),
+                            _getIndicatorRadio(Indicators.SequentialFillIndicator, _indicator, setState),
                           ],
                         );
                       },
@@ -164,13 +138,14 @@ class _MyHomePageState extends State<MyHomePage> {
           )
         ],
       ),
-      body: ListView(
+      body: Column(
         children: <Widget>[
           Container(
             height: 400,
             child: CarouselSlider.builder(
-              key: _sliderKey,
+              initialPage: 0,
               unlimitedMode: true,
+              controller: _sliderController,
               autoSliderTransitionTime: Duration(seconds: 1),
               itemCount: letters.length,
               slideBuilder: (index) {
@@ -202,21 +177,19 @@ class _MyHomePageState extends State<MyHomePage> {
                     iconSize: 48,
                     icon: Icon(Icons.skip_previous),
                     onPressed: () {
-                      _sliderKey.currentState.previousPage();
+                      _sliderController.previousPage();
                     },
                   ),
                   IconButton(
                     iconSize: 64,
                     icon: Icon(
-                      _isPlaying
-                          ? Icons.pause_circle_outline
-                          : Icons.play_circle_outline,
+                      _isPlaying ? Icons.pause_circle_outline : Icons.play_circle_outline,
                     ),
                     onPressed: () {
                       setState(
                         () {
                           _isPlaying = !_isPlaying;
-                          _sliderKey.currentState.setPlaying(_isPlaying);
+                          _sliderController.setAutoSliderEnabled(_isPlaying);
                         },
                       );
                     },
@@ -225,7 +198,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     iconSize: 48,
                     icon: Icon(Icons.skip_next),
                     onPressed: () {
-                      _sliderKey.currentState.nextPage();
+                      _sliderController.nextPage();
                     },
                   ),
                 ],
@@ -247,9 +220,11 @@ class _MyHomePageState extends State<MyHomePage> {
           groupValue: groupValue,
           onChanged: onChange,
         ),
-        Text(
-          value.toString().split('.').last,
-          style: TextStyle(fontSize: 16),
+        Expanded(
+          child: Text(
+            value.toString().split('.').last,
+            style: TextStyle(fontSize: 16),
+          ),
         )
       ],
     );
