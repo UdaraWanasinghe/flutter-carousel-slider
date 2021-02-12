@@ -78,7 +78,7 @@ class BackgroundToForegroundTransform implements SlideTransform {
 
   @override
   Widget transform(BuildContext context, Widget page, int index, int currentPage, double pageDelta, int itemCount) {
-    if (index == currentPage + 1 || currentPage == itemCount - 1 && index == 0) {
+    if (index == currentPage + 1) {
       final double scale = startScale + (1 - startScale) * pageDelta;
       return Transform(
         alignment: Alignment.center,
@@ -160,7 +160,7 @@ class FlipHorizontalTransform implements SlideTransform {
   @override
   Widget transform(BuildContext context, Widget page, int index, int currentPage, double pageDelta, int itemCount) {
     final double width = MediaQuery.of(context).size.width;
-    if ((index == currentPage + 1 || index == 0 && currentPage == itemCount - 1) && pageDelta > 0.5) {
+    if (index == currentPage + 1 && pageDelta > 0.5) {
       return Transform(
         alignment: Alignment.center,
         child: page,
@@ -178,6 +178,8 @@ class FlipHorizontalTransform implements SlideTransform {
           ..rotateY(math.pi * pageDelta)
           ..leftTranslate(width * pageDelta),
       );
+    } else if (pageDelta == 0) {
+      return page;
     } else {
       return Container();
     }
@@ -194,7 +196,7 @@ class FlipVerticalTransform implements SlideTransform {
   @override
   Widget transform(BuildContext context, Widget page, int index, int currentPage, double pageDelta, int itemCount) {
     final double width = MediaQuery.of(context).size.width;
-    if ((index == currentPage + 1 || index == 0 && currentPage == itemCount - 1) && pageDelta > 0.5) {
+    if (index == currentPage + 1 && pageDelta > 0.5) {
       return Transform(
         alignment: Alignment.center,
         child: page,
@@ -212,6 +214,8 @@ class FlipVerticalTransform implements SlideTransform {
           ..rotateX(math.pi * pageDelta)
           ..leftTranslate(width * pageDelta),
       );
+    } else if (pageDelta == 0) {
+      return page;
     } else {
       return Container();
     }
@@ -227,7 +231,7 @@ class ParallaxTransform implements SlideTransform {
 
   @override
   Widget transform(BuildContext context, Widget page, int index, int currentPage, double pageDelta, int itemCount) {
-    if (index == currentPage + 1 || index == 0 && currentPage == itemCount - 1) {
+    if (index == currentPage + 1) {
       return Transform.translate(
         offset: Offset(-clipAmount * (1 - pageDelta), 0),
         child: ClipRect(
@@ -283,7 +287,7 @@ class TabletTransform implements SlideTransform {
           ..setEntry(3, 2, 0.002)
           ..rotateY(-math.pi / 4 * pageDelta),
       );
-    } else if (index == currentPage + 1 || index == 0 && currentPage == itemCount - 1) {
+    } else if (index == currentPage + 1) {
       return Transform(
         alignment: Alignment.center,
         child: page,
@@ -292,7 +296,7 @@ class TabletTransform implements SlideTransform {
           ..rotateY(math.pi / 4 * (1 - pageDelta)),
       );
     } else {
-      return Container();
+      return page;
     }
   }
 
@@ -314,14 +318,14 @@ class RotateDownTransform implements SlideTransform {
         child: page,
         transform: Matrix4.identity()..rotateZ(-rotationAngle * pageDelta),
       );
-    } else if (index == currentPage + 1 || index == 0 && currentPage == itemCount - 1) {
+    } else if (index == currentPage + 1) {
       return Transform(
         alignment: Alignment.bottomCenter,
         child: page,
         transform: Matrix4.identity()..rotateZ(rotationAngle * (1 - pageDelta)),
       );
     } else {
-      return Container();
+      return page;
     }
   }
 }
@@ -341,14 +345,14 @@ class RotateUpTransform implements SlideTransform {
         child: page,
         transform: Matrix4.identity()..rotateZ(rotationAngle * pageDelta),
       );
-    } else if (index == currentPage + 1 || index == 0 && currentPage == itemCount - 1) {
+    } else if (index == currentPage + 1) {
       return Transform(
         alignment: Alignment.topCenter,
         child: page,
         transform: Matrix4.identity()..rotateZ(-rotationAngle * (1 - pageDelta)),
       );
     } else {
-      return Container();
+      return page;
     }
   }
 }
@@ -371,7 +375,7 @@ class ZoomOutSlideTransform implements SlideTransform {
         child: enableOpacity ? Opacity(opacity: scale, child: page) : page,
         transform: Matrix4.identity()..scale(scale, scale),
       );
-    } else if (index == currentPage + 1 || index == 0 && currentPage == itemCount - 1) {
+    } else if (index == currentPage + 1) {
       double scale = pageDelta < zoomOutScale ? zoomOutScale : zoomOutScale + (pageDelta - zoomOutScale);
       return Transform(
         alignment: Alignment.center,
@@ -379,7 +383,7 @@ class ZoomOutSlideTransform implements SlideTransform {
         transform: Matrix4.identity()..scale(scale, scale),
       );
     } else {
-      return Container();
+      return page;
     }
   }
 }

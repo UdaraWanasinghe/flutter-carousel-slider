@@ -147,7 +147,7 @@ class _MyHomePageState extends State<MyHomePage> {
               unlimitedMode: true,
               controller: _sliderController,
               autoSliderTransitionTime: Duration(seconds: 1),
-              itemCount: letters.length,
+              itemCount: 2,
               slideBuilder: (index) {
                 return Container(
                   color: colors[index],
@@ -220,9 +220,11 @@ class _MyHomePageState extends State<MyHomePage> {
           groupValue: groupValue,
           onChanged: onChange,
         ),
-        Text(
-          value.toString().split('.').last,
-          style: TextStyle(fontSize: 16),
+        Expanded(
+          child: Text(
+            value.toString().split('.').last,
+            style: TextStyle(fontSize: 16),
+          ),
         )
       ],
     );
