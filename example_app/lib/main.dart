@@ -147,7 +147,7 @@ class _MyHomePageState extends State<MyHomePage> {
               unlimitedMode: true,
               controller: _sliderController,
               autoSliderTransitionTime: Duration(seconds: 1),
-              itemCount: 2,
+              itemCount: letters.length,
               slideBuilder: (index) {
                 return Container(
                   color: colors[index],
