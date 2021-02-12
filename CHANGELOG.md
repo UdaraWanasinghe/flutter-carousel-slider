@@ -4,4 +4,5 @@
 ## [1.0.3] - Indicator bug fix
 ## [1.0.4] - Indicator bug fix
 ## [1.0.5] - bug fixes
+## [1.0.6] - bug fixes
 
