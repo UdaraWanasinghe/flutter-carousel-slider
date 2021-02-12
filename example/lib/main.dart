@@ -47,7 +47,14 @@ class _MyHomePageState extends State<MyHomePage> {
   ];
 
   bool _isPlaying = false;
-  GlobalKey<CarouselSliderState> _sliderKey = GlobalKey();
+
+  CarouselSliderController _sliderController;
+
+  @override
+  void initState() {
+    super.initState();
+    _sliderController = CarouselSliderController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,8 +67,8 @@ class _MyHomePageState extends State<MyHomePage> {
           Container(
             height: 500,
             child: CarouselSlider.builder(
-              key: _sliderKey,
               unlimitedMode: true,
+              controller: _sliderController,
               slideBuilder: (index) {
                 return Container(
                   alignment: Alignment.center,
@@ -76,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
               slideIndicator: CircularSlideIndicator(
                 padding: EdgeInsets.only(bottom: 32),
               ),
-              itemCount: 1,
+              itemCount: 5,
             ),
           ),
           Padding(
@@ -91,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       iconSize: 48,
                       icon: Icon(Icons.skip_previous),
                       onPressed: () {
-                        _sliderKey.currentState.previousPage();
+                        _sliderController.previousPage();
                       },
                     ),
                     IconButton(
@@ -103,7 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         setState(
                           () {
                             _isPlaying = !_isPlaying;
-                            _sliderKey.currentState.setPlaying(_isPlaying);
+                            _sliderController.setAutoSliderEnabled(_isPlaying);
                           },
                         );
                       },
@@ -112,7 +119,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       iconSize: 48,
                       icon: Icon(Icons.skip_next),
                       onPressed: () {
-                        _sliderKey.currentState.nextPage();
+                        _sliderController.nextPage();
                       },
                     ),
                   ],

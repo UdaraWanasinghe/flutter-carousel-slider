@@ -33,16 +33,8 @@ class CubeTransform implements SlideTransform {
           ..rotateY(-rotationAngle * (1 - pageDelta)),
         child: page,
       );
-    } else if (index == 0 && currentPage == itemCount - 1) {
-      return Transform(
-        alignment: rightPageAlignment,
-        transform: Matrix4.identity()
-          ..setEntry(3, 2, perspectiveScale)
-          ..rotateY(-rotationAngle * (1 - pageDelta)),
-        child: page,
-      );
     } else {
-      return Container();
+      return page;
     }
   }
 }

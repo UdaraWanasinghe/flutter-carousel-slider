@@ -55,7 +55,13 @@ class _MyHomePageState extends State<MyHomePage> {
     padding: EdgeInsets.only(bottom: 32),
   );
   bool _isPlaying = false;
-  GlobalKey<CarouselSliderState> _sliderKey = GlobalKey<CarouselSliderState>();
+  CarouselSliderController _sliderController;
+
+  @override
+  void initState() {
+    super.initState();
+    _sliderController = CarouselSliderController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -138,8 +144,8 @@ class _MyHomePageState extends State<MyHomePage> {
             height: 400,
             child: CarouselSlider.builder(
               initialPage: 0,
-              key: _sliderKey,
               unlimitedMode: true,
+              controller: _sliderController,
               autoSliderTransitionTime: Duration(seconds: 1),
               itemCount: letters.length,
               slideBuilder: (index) {
@@ -171,7 +177,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     iconSize: 48,
                     icon: Icon(Icons.skip_previous),
                     onPressed: () {
-                      _sliderKey.currentState.previousPage();
+                      _sliderController.previousPage();
                     },
                   ),
                   IconButton(
@@ -183,7 +189,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       setState(
                         () {
                           _isPlaying = !_isPlaying;
-                          _sliderKey.currentState.setPlaying(_isPlaying);
+                          _sliderController.setAutoSliderEnabled(_isPlaying);
                         },
                       );
                     },
@@ -192,7 +198,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     iconSize: 48,
                     icon: Icon(Icons.skip_next),
                     onPressed: () {
-                      _sliderKey.currentState.nextPage();
+                      _sliderController.nextPage();
                     },
                   ),
                 ],

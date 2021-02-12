@@ -8,6 +8,9 @@ import 'package:flutter/rendering.dart';
 import 'carousel_slider_indicators.dart';
 import 'carousel_slider_transforms.dart';
 
+const _kMaxValue = 200000000000;
+const _kMiddleValue = 100000;
+
 class CarouselSlider extends StatefulWidget {
   final CarouselSlideBuilder slideBuilder;
   final List<Widget> children;
@@ -24,6 +27,7 @@ class CarouselSlider extends StatefulWidget {
   final ScrollPhysics scrollPhysics;
   final Axis scrollDirection;
   final int initialPage;
+  final CarouselSliderController controller;
 
   CarouselSlider.builder({
     Key key,
@@ -41,6 +45,7 @@ class CarouselSlider extends StatefulWidget {
     this.scrollDirection = Axis.horizontal,
     this.unlimitedMode = false,
     this.initialPage = 0,
+    this.controller,
   })  : children = null,
         super(key: key);
 
@@ -59,80 +64,92 @@ class CarouselSlider extends StatefulWidget {
     this.scrollDirection = Axis.horizontal,
     this.unlimitedMode = false,
     this.initialPage = 0,
+    this.controller,
   })  : slideBuilder = null,
         itemCount = children.length,
         super(key: key);
 
   @override
-  State<StatefulWidget> createState() {
-    return CarouselSliderState(isPlaying: enableAutoSlider);
-  }
+  State<StatefulWidget> createState() => _CarouselSliderState();
 }
 
-class CarouselSliderState extends State<CarouselSlider> {
+class _CarouselSliderState extends State<CarouselSlider> {
   PageController _pageController;
   Timer _timer;
   int _currentPage;
   double _pageDelta = 0;
   bool _isPlaying;
 
-  CarouselSliderState({bool isPlaying = false}) : _isPlaying = isPlaying;
-
   @override
   void initState() {
     super.initState();
+    _isPlaying = widget.enableAutoSlider;
     _currentPage = widget.initialPage;
+    _initCarouselSliderController();
+    _initPageController();
+    _setAutoSliderEnabled(_isPlaying);
+  }
+
+  void _initPageController() {
+    _pageController?.dispose();
     _pageController = new PageController(
       viewportFraction: widget.viewportFraction,
       keepPage: widget.keepPage,
-      initialPage: widget.initialPage,
+      initialPage: widget.unlimitedMode ? _kMiddleValue * widget.itemCount + _currentPage : _currentPage,
     );
-    if (_isPlaying) {
-      _timer = Timer.periodic(widget.autoSliderTimeout, (timer) {
-        _pageController.nextPage(
-          duration: widget.autoSliderTransitionTime,
-          curve: widget.autoSliderTransitionCurve,
-        );
-      });
-    }
     _pageController.addListener(() {
       setState(() {
-        _currentPage = _pageController.page.floor() % widget.itemCount;
+        _currentPage = _pageController.page.floor();
         _pageDelta = _pageController.page - _pageController.page.floor();
       });
     });
+  }
+
+  void _initCarouselSliderController() {
+    if (widget.controller != null) {
+      widget.controller._state = this;
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant CarouselSlider oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.enableAutoSlider != widget.enableAutoSlider) {
+      _setAutoSliderEnabled(widget.enableAutoSlider);
+    }
+    if (oldWidget.itemCount != widget.itemCount) {
+      _initPageController();
+    }
+    _initCarouselSliderController();
   }
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        PageView.builder(
-          itemCount: widget.unlimitedMode
-              ? widget.itemCount > 0
-                  ? null
-                  : 0
-              : widget.itemCount,
-          controller: _pageController,
-          scrollDirection: widget.scrollDirection,
-          physics: widget.scrollPhysics,
-          itemBuilder: (context, index) {
-            index %= widget.itemCount;
-            Widget slide = widget.children == null ? widget.slideBuilder(index) : widget.children[index];
-            return widget.slideTransform.transform(context, slide, index, _currentPage, _pageDelta, widget.itemCount);
-          },
-        ),
+        if (widget.itemCount > 0)
+          PageView.builder(
+            itemCount: widget.unlimitedMode ? _kMaxValue : widget.itemCount,
+            controller: _pageController,
+            scrollDirection: widget.scrollDirection,
+            physics: widget.scrollPhysics,
+            itemBuilder: (context, index) {
+              final slideIndex = index % widget.itemCount;
+              Widget slide = widget.children == null ? widget.slideBuilder(slideIndex) : widget.children[slideIndex];
+              return widget.slideTransform.transform(context, slide, index, _currentPage, _pageDelta, widget.itemCount);
+            },
+          ),
         if (widget.slideIndicator != null && widget.itemCount > 0)
-          widget.slideIndicator.build(_currentPage, _pageDelta, widget.itemCount),
+          widget.slideIndicator.build(_currentPage % widget.itemCount, _pageDelta, widget.itemCount),
       ],
     );
   }
 
-  void setPlaying(bool playing) {
+  void _setAutoSliderEnabled(bool isEnabled) {
     if (_timer != null) {
       _timer.cancel();
     }
-    if (playing) {
+    if (isEnabled) {
       _timer = Timer.periodic(widget.autoSliderTimeout, (timer) {
         _pageController.nextPage(
           duration: widget.autoSliderTransitionTime,
@@ -142,14 +159,14 @@ class CarouselSliderState extends State<CarouselSlider> {
     }
   }
 
-  void nextPage() {
+  void _nextPage() {
     _pageController.nextPage(
       duration: widget.autoSliderTransitionTime,
       curve: widget.autoSliderTransitionCurve,
     );
   }
 
-  void previousPage() {
+  void _previousPage() {
     _pageController.previousPage(
       duration: widget.autoSliderTransitionTime,
       curve: widget.autoSliderTransitionCurve,
@@ -159,8 +176,29 @@ class CarouselSliderState extends State<CarouselSlider> {
   @override
   void dispose() {
     super.dispose();
-    if (_timer != null) {
-      _timer.cancel();
+    _timer?.cancel();
+    _pageController?.dispose();
+  }
+}
+
+class CarouselSliderController {
+  _CarouselSliderState _state;
+
+  nextPage() {
+    if (_state != null && _state.mounted) {
+      _state._nextPage();
+    }
+  }
+
+  previousPage() {
+    if (_state != null && _state.mounted) {
+      _state._previousPage();
+    }
+  }
+
+  setAutoSliderEnabled(bool isEnabled) {
+    if (_state != null && _state.mounted) {
+      _state._setAutoSliderEnabled(isEnabled);
     }
   }
 }
