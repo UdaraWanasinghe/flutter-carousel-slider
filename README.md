@@ -2,7 +2,7 @@
 
 A customizable carousel slider for flutter
 
-[![pub package](https://img.shields.io/badge/pub-v1.0.2-orange)](https://pub.dev/packages/flutter_carousel_slider)
+[![pub package](https://img.shields.io/badge/pub-v1.0.6-orange)](https://pub.dev/packages/flutter_carousel_slider)
 
 ## Screenshots
 
