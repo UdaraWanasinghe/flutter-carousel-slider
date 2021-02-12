@@ -12,7 +12,7 @@ A customizable carousel slider for flutter
 
 ```
 dependencies:
-  flutter_carousel_slider: ^1.0.2
+  flutter_carousel_slider: ^1.0.6
 ```
 
 ## Demo

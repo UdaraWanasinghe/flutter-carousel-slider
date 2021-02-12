@@ -82,6 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
               slideTransform: CubeTransform(),
               slideIndicator: CircularSlideIndicator(
                 padding: EdgeInsets.only(bottom: 32),
+                indicatorBorderColor: Colors.black,
               ),
               itemCount: colors.length,
               initialPage: 0,
