@@ -3,18 +3,22 @@ import 'package:flutter/material.dart';
 class CircularSlideIndicator implements SlideIndicator {
   final double itemSpacing;
   final double indicatorRadius;
+  final double indicatorBorderRadius;
   final EdgeInsets padding;
   final AlignmentGeometry alignment;
   final Color currentIndicatorColor;
   final Color indicatorBackgroundColor;
+  final Color indicatorBorderColor;
 
   CircularSlideIndicator({
     this.itemSpacing = 20,
     this.indicatorRadius = 6,
+    this.indicatorBorderRadius = 2,
     this.padding,
     this.alignment = Alignment.bottomCenter,
     this.currentIndicatorColor = const Color(0xFF000000),
     this.indicatorBackgroundColor = const Color(0x64000000),
+    this.indicatorBorderColor,
   });
 
   @override
@@ -29,10 +33,12 @@ class CircularSlideIndicator implements SlideIndicator {
           painter: CircularIndicatorPainter(
             currentIndicatorColor: currentIndicatorColor,
             indicatorBackgroundColor: indicatorBackgroundColor,
+            indicatorBorderColor: indicatorBorderColor,
             currentPage: currentPage,
             pageDelta: pageDelta,
             itemCount: itemCount,
             radius: indicatorRadius,
+            borderRadius: indicatorBorderRadius,
           ),
         ),
       ),
@@ -43,8 +49,10 @@ class CircularSlideIndicator implements SlideIndicator {
 class CircularIndicatorPainter extends CustomPainter {
   final int itemCount;
   final double radius;
+  final double borderRadius;
   final Paint indicatorPaint = Paint();
   final Paint currentIndicatorPaint = Paint();
+  final Paint borderIndicatorPaint = Paint();
   final int currentPage;
   final double pageDelta;
 
@@ -53,8 +61,10 @@ class CircularIndicatorPainter extends CustomPainter {
     @required this.pageDelta,
     @required this.itemCount,
     this.radius = 12,
+    this.borderRadius = 2,
     Color currentIndicatorColor,
     Color indicatorBackgroundColor,
+    Color indicatorBorderColor,
   }) {
     indicatorPaint.color = indicatorBackgroundColor;
     indicatorPaint.style = PaintingStyle.fill;
@@ -62,6 +72,12 @@ class CircularIndicatorPainter extends CustomPainter {
     currentIndicatorPaint.color = currentIndicatorColor;
     currentIndicatorPaint.style = PaintingStyle.fill;
     currentIndicatorPaint.isAntiAlias = true;
+
+    if (indicatorBorderColor != null) {
+      borderIndicatorPaint.color = indicatorBorderColor;
+      borderIndicatorPaint.style = PaintingStyle.fill;
+      borderIndicatorPaint.isAntiAlias = true;
+    }
   }
 
   @override
@@ -69,10 +85,22 @@ class CircularIndicatorPainter extends CustomPainter {
     final dx = itemCount < 2 ? size.width : (size.width - 2 * radius) / (itemCount - 1);
     final y = size.height / 2;
     double x = radius;
+
+    if (borderIndicatorPaint.color != null) {
+      for (int i = 0; i < itemCount; i++) {
+        canvas.drawCircle(
+            Offset(x, y), radius + borderRadius, borderIndicatorPaint);
+        x += dx;
+      }
+
+      x = radius;
+    }
+
     for (int i = 0; i < itemCount; i++) {
       canvas.drawCircle(Offset(x, y), radius, indicatorPaint);
       x += dx;
     }
+
     canvas.save();
     double midX = radius + dx * currentPage;
     double midY = size.height / 2;
