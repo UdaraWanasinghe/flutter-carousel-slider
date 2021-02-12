@@ -84,6 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: EdgeInsets.only(bottom: 32),
               ),
               itemCount: 5,
+              initialPage: 0,
             ),
           ),
           Padding(
