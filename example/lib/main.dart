@@ -83,8 +83,9 @@ class _MyHomePageState extends State<MyHomePage> {
               slideIndicator: CircularSlideIndicator(
                 padding: EdgeInsets.only(bottom: 32),
               ),
-              itemCount: 5,
+              itemCount: colors.length,
               initialPage: 0,
+              enableAutoSlider: true,
             ),
           ),
           Padding(
