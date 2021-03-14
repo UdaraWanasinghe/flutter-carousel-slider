@@ -4,8 +4,8 @@ class CircularSlideIndicator implements SlideIndicator {
   final double itemSpacing;
   final double indicatorRadius;
   final double indicatorBorderWidth;
-  final Color indicatorBorderColor;
-  final EdgeInsets padding;
+  final Color? indicatorBorderColor;
+  final EdgeInsets? padding;
   final AlignmentGeometry alignment;
   final Color currentIndicatorColor;
   final Color indicatorBackgroundColor;
@@ -54,16 +54,16 @@ class CircularIndicatorPainter extends CustomPainter {
   final int currentPage;
   final double pageDelta;
   final Paint borderIndicatorPaint = Paint();
-  final Color indicatorBorderColor;
+  final Color? indicatorBorderColor;
 
   CircularIndicatorPainter({
-    @required this.currentPage,
-    @required this.pageDelta,
-    @required this.itemCount,
+    required this.currentPage,
+    required this.pageDelta,
+    required this.itemCount,
     this.radius = 12,
     double borderWidth = 2,
-    Color currentIndicatorColor,
-    Color indicatorBackgroundColor,
+    required Color currentIndicatorColor,
+    required Color indicatorBackgroundColor,
     this.indicatorBorderColor,
   }) {
     indicatorPaint.color = indicatorBackgroundColor;
@@ -74,7 +74,7 @@ class CircularIndicatorPainter extends CustomPainter {
     currentIndicatorPaint.isAntiAlias = true;
 
     if (indicatorBorderColor != null) {
-      borderIndicatorPaint.color = indicatorBorderColor;
+      borderIndicatorPaint.color = indicatorBorderColor!;
       borderIndicatorPaint.style = PaintingStyle.stroke;
       borderIndicatorPaint.strokeWidth = borderWidth;
       borderIndicatorPaint.isAntiAlias = true;
@@ -130,12 +130,12 @@ class CircularIndicatorPainter extends CustomPainter {
 class CircularWaveSlideIndicator implements SlideIndicator {
   final double itemSpacing;
   final double indicatorRadius;
-  final EdgeInsets padding;
+  final EdgeInsets? padding;
   final AlignmentGeometry alignment;
   final Color currentIndicatorColor;
   final Color indicatorBackgroundColor;
   final double indicatorBorderWidth;
-  final Color indicatorBorderColor;
+  final Color? indicatorBorderColor;
 
   CircularWaveSlideIndicator({
     this.itemSpacing = 20,
@@ -174,23 +174,23 @@ class CircularWaveSlideIndicator implements SlideIndicator {
 }
 
 class CircularWaveIndicatorPainter extends CustomPainter {
-  final int itemCount;
-  final int currentPage;
-  final double pageDelta;
-  final double radius;
+  final int? itemCount;
+  final int? currentPage;
+  final double? pageDelta;
+  final double? radius;
   final Paint indicatorPaint = Paint();
   final Paint currentIndicatorPaint = Paint();
 
   final Paint borderIndicatorPaint = Paint();
-  final Color indicatorBorderColor;
+  final Color? indicatorBorderColor;
 
   CircularWaveIndicatorPainter({
     this.itemCount,
     this.currentPage,
     this.pageDelta,
     this.radius,
-    Color currentIndicatorColor,
-    Color indicatorBackgroundColor,
+    required Color currentIndicatorColor,
+    required Color indicatorBackgroundColor,
     this.indicatorBorderColor,
     double borderWidth = 2,
   }) {
@@ -202,7 +202,7 @@ class CircularWaveIndicatorPainter extends CustomPainter {
     currentIndicatorPaint.isAntiAlias = true;
 
     if (indicatorBorderColor != null) {
-      borderIndicatorPaint.color = indicatorBorderColor;
+      borderIndicatorPaint.color = indicatorBorderColor!;
       borderIndicatorPaint.style = PaintingStyle.stroke;
       borderIndicatorPaint.strokeWidth = borderWidth;
       borderIndicatorPaint.isAntiAlias = true;
@@ -211,35 +211,35 @@ class CircularWaveIndicatorPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final dx = itemCount < 2 ? size.width : (size.width - 2 * radius) / (itemCount - 1);
+    final dx = itemCount! < 2 ? size.width : (size.width - 2 * radius!) / (itemCount! - 1);
     final y = size.height / 2;
-    double x = radius;
-    for (int i = 0; i < itemCount; i++) {
-      canvas.drawCircle(Offset(x, y), radius, indicatorPaint);
+    double? x = radius;
+    for (int i = 0; i < itemCount!; i++) {
+      canvas.drawCircle(Offset(x!, y), radius!, indicatorPaint);
       x += dx;
     }
-    double midX = radius + dx * currentPage;
+    double midX = radius! + dx * currentPage!;
     double midY = size.height / 2;
-    double r = radius * ((1.4 * pageDelta - 0.7).abs() + 0.3);
-    if (currentPage == itemCount - 1) {
+    double r = radius! * ((1.4 * pageDelta! - 0.7).abs() + 0.3);
+    if (currentPage == itemCount! - 1) {
       canvas.save();
       final path = Path();
-      path.addOval(Rect.fromLTRB(0, midY - radius, 2 * radius, midY + radius));
-      path.addOval(Rect.fromLTRB(size.width - 2 * radius, midY - radius, size.width, midY + radius));
+      path.addOval(Rect.fromLTRB(0, midY - radius!, 2 * radius!, midY + radius!));
+      path.addOval(Rect.fromLTRB(size.width - 2 * radius!, midY - radius!, size.width, midY + radius!));
       canvas.clipPath(path);
-      canvas.drawCircle(Offset(2 * radius * pageDelta - radius, midY), r, currentIndicatorPaint);
-      midX += 2 * radius * pageDelta;
+      canvas.drawCircle(Offset(2 * radius! * pageDelta! - radius!, midY), r, currentIndicatorPaint);
+      midX += 2 * radius! * pageDelta!;
     } else {
-      midX += dx * pageDelta;
+      midX += dx * pageDelta!;
     }
     canvas.drawCircle(Offset(midX, midY), r, currentIndicatorPaint);
-    if (currentPage == itemCount - 1) {
+    if (currentPage == itemCount! - 1) {
       canvas.restore();
     }
     if (indicatorBorderColor != null) {
       x = radius;
-      for (int i = 0; i < itemCount; i++) {
-        canvas.drawCircle(Offset(x, y), radius, borderIndicatorPaint);
+      for (int i = 0; i < itemCount!; i++) {
+        canvas.drawCircle(Offset(x!, y), radius!, borderIndicatorPaint);
         x += dx;
       }
     }
@@ -254,13 +254,13 @@ class CircularWaveIndicatorPainter extends CustomPainter {
 class CircularStaticIndicator extends SlideIndicator {
   final double itemSpacing;
   final double indicatorRadius;
-  final EdgeInsets padding;
+  final EdgeInsets? padding;
   final AlignmentGeometry alignment;
   final Color currentIndicatorColor;
   final Color indicatorBackgroundColor;
   final bool enableAnimation;
   final double indicatorBorderWidth;
-  final Color indicatorBorderColor;
+  final Color? indicatorBorderColor;
 
   CircularStaticIndicator({
     this.itemSpacing = 20,
@@ -310,15 +310,15 @@ class CircularStaticIndicatorPainter extends CustomPainter {
   final bool enableAnimation;
 
   final Paint borderIndicatorPaint = Paint();
-  final Color indicatorBorderColor;
+  final Color? indicatorBorderColor;
 
   CircularStaticIndicatorPainter({
-    @required this.currentPage,
-    @required this.pageDelta,
-    @required this.itemCount,
+    required this.currentPage,
+    required this.pageDelta,
+    required this.itemCount,
     this.radius = 12,
-    Color currentIndicatorColor,
-    Color indicatorBackgroundColor,
+    required Color currentIndicatorColor,
+    required Color indicatorBackgroundColor,
     this.enableAnimation = false,
     this.indicatorBorderColor,
     double borderWidth = 2,
@@ -331,7 +331,7 @@ class CircularStaticIndicatorPainter extends CustomPainter {
     currentIndicatorPaint.isAntiAlias = true;
 
     if (indicatorBorderColor != null) {
-      borderIndicatorPaint.color = indicatorBorderColor;
+      borderIndicatorPaint.color = indicatorBorderColor!;
       borderIndicatorPaint.style = PaintingStyle.stroke;
       borderIndicatorPaint.strokeWidth = borderWidth;
       borderIndicatorPaint.isAntiAlias = true;
@@ -371,13 +371,13 @@ class CircularStaticIndicatorPainter extends CustomPainter {
 class SequentialFillIndicator extends SlideIndicator {
   final double itemSpacing;
   final double indicatorRadius;
-  final EdgeInsets padding;
+  final EdgeInsets? padding;
   final AlignmentGeometry alignment;
   final Color currentIndicatorColor;
   final Color indicatorBackgroundColor;
   final bool enableAnimation;
   final double indicatorBorderWidth;
-  final Color indicatorBorderColor;
+  final Color? indicatorBorderColor;
 
   SequentialFillIndicator({
     this.itemSpacing = 20,
@@ -427,15 +427,15 @@ class SequentialFillIndicatorPainter extends CustomPainter {
   final bool enableAnimation;
 
   final Paint borderIndicatorPaint = Paint();
-  final Color indicatorBorderColor;
+  final Color? indicatorBorderColor;
 
   SequentialFillIndicatorPainter({
-    @required this.currentPage,
-    @required this.pageDelta,
-    @required this.itemCount,
+    required this.currentPage,
+    required this.pageDelta,
+    required this.itemCount,
     this.radius = 12,
-    Color currentIndicatorColor,
-    Color indicatorBackgroundColor,
+    required Color currentIndicatorColor,
+    required Color indicatorBackgroundColor,
     this.enableAnimation = false,
     this.indicatorBorderColor,
     double borderWidth = 2,
@@ -450,7 +450,7 @@ class SequentialFillIndicatorPainter extends CustomPainter {
     currentIndicatorPaint.strokeWidth = radius * 2;
 
     if (indicatorBorderColor != null) {
-      borderIndicatorPaint.color = indicatorBorderColor;
+      borderIndicatorPaint.color = indicatorBorderColor!;
       borderIndicatorPaint.style = PaintingStyle.stroke;
       borderIndicatorPaint.strokeWidth = borderWidth;
       borderIndicatorPaint.isAntiAlias = true;
