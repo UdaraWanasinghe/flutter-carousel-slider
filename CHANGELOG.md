@@ -6,4 +6,5 @@
 ## [1.0.5] - bug fixes
 ## [1.0.6] - bug fixes
 ## [1.0.7] - Migrated to null safety
+## [1.0.8] - Improvements
 
