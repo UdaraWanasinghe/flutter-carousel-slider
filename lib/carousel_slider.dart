@@ -3,7 +3,7 @@ library fluttercarouselslider;
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+// import 'package:flutter/rendering.dart';
 
 import 'carousel_slider_indicators.dart';
 import 'carousel_slider_transforms.dart';
@@ -29,6 +29,7 @@ class CarouselSlider extends StatefulWidget {
     this.scrollDirection = Axis.horizontal,
     this.unlimitedMode = false,
     this.initialPage = 0,
+    this.onSlideChanged,
     this.controller,
   })  : slideBuilder = null,
         itemCount = children.length,
@@ -50,6 +51,7 @@ class CarouselSlider extends StatefulWidget {
     this.scrollDirection = Axis.horizontal,
     this.unlimitedMode = false,
     this.initialPage = 0,
+    this.onSlideChanged,
     this.controller,
   })  : children = null,
         super(key: key);
@@ -72,7 +74,7 @@ class CarouselSlider extends StatefulWidget {
   final ScrollPhysics scrollPhysics;
   final Axis scrollDirection;
   final int initialPage;
-
+  final ValueChanged<int>? onSlideChanged;
   final CarouselSliderController? controller;
 
   @override
@@ -114,18 +116,25 @@ class _CarouselSliderState extends State<CarouselSlider> {
       children: <Widget>[
         if (widget.itemCount > 0)
           PageView.builder(
+            onPageChanged: (val) {
+              widget.onSlideChanged!(val);
+            },
             itemCount: widget.unlimitedMode ? _kMaxValue : widget.itemCount,
             controller: _pageController,
             scrollDirection: widget.scrollDirection,
             physics: widget.scrollPhysics,
             itemBuilder: (context, index) {
               final slideIndex = index % widget.itemCount;
-              Widget slide = widget.children == null ? widget.slideBuilder!(slideIndex) : widget.children![slideIndex];
-              return widget.slideTransform.transform(context, slide, index, _currentPage, _pageDelta, widget.itemCount);
+              Widget slide = widget.children == null
+                  ? widget.slideBuilder!(slideIndex)
+                  : widget.children![slideIndex];
+              return widget.slideTransform.transform(context, slide, index,
+                  _currentPage, _pageDelta, widget.itemCount);
             },
           ),
         if (widget.slideIndicator != null && widget.itemCount > 0)
-          widget.slideIndicator!.build(_currentPage! % widget.itemCount, _pageDelta, widget.itemCount),
+          widget.slideIndicator!.build(
+              _currentPage! % widget.itemCount, _pageDelta, widget.itemCount),
       ],
     );
   }
@@ -170,7 +179,9 @@ class _CarouselSliderState extends State<CarouselSlider> {
     _pageController = new PageController(
       viewportFraction: widget.viewportFraction,
       keepPage: widget.keepPage,
-      initialPage: widget.unlimitedMode ? _kMiddleValue * widget.itemCount + _currentPage! : _currentPage!,
+      initialPage: widget.unlimitedMode
+          ? _kMiddleValue * widget.itemCount + _currentPage!
+          : _currentPage!,
     );
     _pageController!.addListener(() {
       setState(() {

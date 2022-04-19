@@ -1,7 +1,7 @@
 name: flutter_carousel_slider
 description: A customizable carousel slider for Flutter. Supports infinite sliding, custom indicators, and custom animations with many pre-built indicators and animations.
 version: 1.0.8
-author: Udara Wanasinghe <udara.developer@gmail.com>
+# author: Udara Wanasinghe <udara.developer@gmail.com>
 homepage: https://github.com/UdaraWanasinghe/FlutterCarouselSlider
 
 environment:
