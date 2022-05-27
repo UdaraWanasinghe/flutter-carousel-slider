@@ -2,8 +2,8 @@ library fluttercarouselslider;
 
 import 'dart:async';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 import 'carousel_slider_indicators.dart';
 import 'carousel_slider_transforms.dart';
@@ -114,18 +114,27 @@ class _CarouselSliderState extends State<CarouselSlider> {
       children: <Widget>[
         if (widget.itemCount > 0)
           PageView.builder(
+            scrollBehavior: ScrollConfiguration.of(context).copyWith(
+              scrollbars: false,
+              overscroll: false,
+              dragDevices: {PointerDeviceKind.touch, PointerDeviceKind.mouse},
+            ),
             itemCount: widget.unlimitedMode ? _kMaxValue : widget.itemCount,
             controller: _pageController,
             scrollDirection: widget.scrollDirection,
             physics: widget.scrollPhysics,
             itemBuilder: (context, index) {
               final slideIndex = index % widget.itemCount;
-              Widget slide = widget.children == null ? widget.slideBuilder!(slideIndex) : widget.children![slideIndex];
-              return widget.slideTransform.transform(context, slide, index, _currentPage, _pageDelta, widget.itemCount);
+              Widget slide = widget.children == null
+                  ? widget.slideBuilder!(slideIndex)
+                  : widget.children![slideIndex];
+              return widget.slideTransform.transform(context, slide, index,
+                  _currentPage, _pageDelta, widget.itemCount);
             },
           ),
         if (widget.slideIndicator != null && widget.itemCount > 0)
-          widget.slideIndicator!.build(_currentPage! % widget.itemCount, _pageDelta, widget.itemCount),
+          widget.slideIndicator!.build(
+              _currentPage! % widget.itemCount, _pageDelta, widget.itemCount),
       ],
     );
   }
@@ -170,7 +179,9 @@ class _CarouselSliderState extends State<CarouselSlider> {
     _pageController = new PageController(
       viewportFraction: widget.viewportFraction,
       keepPage: widget.keepPage,
-      initialPage: widget.unlimitedMode ? _kMiddleValue * widget.itemCount + _currentPage! : _currentPage!,
+      initialPage: widget.unlimitedMode
+          ? _kMiddleValue * widget.itemCount + _currentPage!
+          : _currentPage!,
     );
     _pageController!.addListener(() {
       setState(() {
