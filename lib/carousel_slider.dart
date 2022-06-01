@@ -2,6 +2,7 @@ library fluttercarouselslider;
 
 import 'dart:async';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -123,6 +124,11 @@ class _CarouselSliderState extends State<CarouselSlider> {
               widget.onSlideChanged!(val);
             },
             clipBehavior: widget.clipBehavior,
+            scrollBehavior: ScrollConfiguration.of(context).copyWith(
+              scrollbars: false,
+              overscroll: false,
+              dragDevices: {PointerDeviceKind.touch, PointerDeviceKind.mouse},
+            ),
             itemCount: widget.unlimitedMode ? _kMaxValue : widget.itemCount,
             controller: _pageController,
             scrollDirection: widget.scrollDirection,
