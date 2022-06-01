@@ -31,6 +31,7 @@ class CarouselSlider extends StatefulWidget {
     this.initialPage = 0,
     this.onSlideChanged,
     this.controller,
+    this.clipBehavior = Clip.hardEdge,
   })  : slideBuilder = null,
         itemCount = children.length,
         super(key: key);
@@ -53,6 +54,7 @@ class CarouselSlider extends StatefulWidget {
     this.initialPage = 0,
     this.onSlideChanged,
     this.controller,
+    this.clipBehavior = Clip.hardEdge,
   })  : children = null,
         super(key: key);
 
@@ -75,6 +77,7 @@ class CarouselSlider extends StatefulWidget {
   final Axis scrollDirection;
   final int initialPage;
   final ValueChanged<int>? onSlideChanged;
+  final Clip clipBehavior;
   final CarouselSliderController? controller;
 
   @override
@@ -119,6 +122,7 @@ class _CarouselSliderState extends State<CarouselSlider> {
             onPageChanged: (val) {
               widget.onSlideChanged!(val);
             },
+            clipBehavior: widget.clipBehavior,
             itemCount: widget.unlimitedMode ? _kMaxValue : widget.itemCount,
             controller: _pageController,
             scrollDirection: widget.scrollDirection,
