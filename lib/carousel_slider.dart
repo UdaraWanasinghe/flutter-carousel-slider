@@ -121,7 +121,7 @@ class _CarouselSliderState extends State<CarouselSlider> {
         if (widget.itemCount > 0)
           PageView.builder(
             onPageChanged: (val) {
-              widget.onSlideChanged!(val);
+              widget.onSlideChanged?.call(val);
             },
             clipBehavior: widget.clipBehavior,
             scrollBehavior: ScrollConfiguration.of(context).copyWith(
