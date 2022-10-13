@@ -31,6 +31,8 @@ class CarouselSlider extends StatefulWidget {
     this.unlimitedMode = false,
     this.initialPage = 0,
     this.onSlideChanged,
+    this.onDragStart,
+    this.onDragEnd,
     this.controller,
     this.clipBehavior = Clip.hardEdge,
   })  : slideBuilder = null,
@@ -54,6 +56,8 @@ class CarouselSlider extends StatefulWidget {
     this.unlimitedMode = false,
     this.initialPage = 0,
     this.onSlideChanged,
+    this.onDragStart,
+    this.onDragEnd,
     this.controller,
     this.clipBehavior = Clip.hardEdge,
   })  : children = null,
@@ -78,6 +82,8 @@ class CarouselSlider extends StatefulWidget {
   final Axis scrollDirection;
   final int initialPage;
   final ValueChanged<int>? onSlideChanged;
+  final VoidCallback? onDragStart;
+  final VoidCallback? onDragEnd;
   final Clip clipBehavior;
   final CarouselSliderController? controller;
 
@@ -135,12 +141,16 @@ class _CarouselSliderState extends State<CarouselSlider> {
             physics: widget.scrollPhysics,
             itemBuilder: (context, index) {
               final slideIndex = index % widget.itemCount;
-              Widget slide = widget.children == null ? widget.slideBuilder!(slideIndex) : widget.children![slideIndex];
-              return widget.slideTransform.transform(context, slide, index, _currentPage, _pageDelta, widget.itemCount);
+              Widget slide = widget.children == null
+                  ? widget.slideBuilder!(slideIndex)
+                  : widget.children![slideIndex];
+              return widget.slideTransform.transform(context, slide, index,
+                  _currentPage, _pageDelta, widget.itemCount);
             },
           ),
         if (widget.slideIndicator != null && widget.itemCount > 0)
-          widget.slideIndicator!.build(_currentPage! % widget.itemCount, _pageDelta, widget.itemCount),
+          widget.slideIndicator!.build(
+              _currentPage! % widget.itemCount, _pageDelta, widget.itemCount),
       ],
     );
   }
@@ -182,13 +192,21 @@ class _CarouselSliderState extends State<CarouselSlider> {
 
   void _initPageController() {
     _pageController?.dispose();
-    _pageController = new PageController(
+    _pageController = PageController(
       viewportFraction: widget.viewportFraction,
       keepPage: widget.keepPage,
-      initialPage: widget.unlimitedMode ? _kMiddleValue * widget.itemCount + _currentPage! : _currentPage!,
+      initialPage: widget.unlimitedMode
+          ? _kMiddleValue * widget.itemCount + _currentPage!
+          : _currentPage!,
     );
     _pageController!.addListener(() {
+      ///onDragStart and onDragEnd methods are added
       setState(() {
+        if (_currentPage == _pageController!.page!.floor()) {
+          widget.onDragStart!.call();
+        } else {
+          widget.onDragEnd!.call();
+        }
         _currentPage = _pageController!.page!.floor();
         _pageDelta = _pageController!.page! - _pageController!.page!.floor();
       });
