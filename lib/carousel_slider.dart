@@ -31,8 +31,8 @@ class CarouselSlider extends StatefulWidget {
     this.unlimitedMode = false,
     this.initialPage = 0,
     this.onSlideChanged,
-    this.onDragStart,
-    this.onDragEnd,
+    this.onSlideStart,
+    this.onSlideEnd,
     this.controller,
     this.clipBehavior = Clip.hardEdge,
   })  : slideBuilder = null,
@@ -56,8 +56,8 @@ class CarouselSlider extends StatefulWidget {
     this.unlimitedMode = false,
     this.initialPage = 0,
     this.onSlideChanged,
-    this.onDragStart,
-    this.onDragEnd,
+    this.onSlideStart,
+    this.onSlideEnd,
     this.controller,
     this.clipBehavior = Clip.hardEdge,
   })  : children = null,
@@ -82,8 +82,8 @@ class CarouselSlider extends StatefulWidget {
   final Axis scrollDirection;
   final int initialPage;
   final ValueChanged<int>? onSlideChanged;
-  final VoidCallback? onDragStart;
-  final VoidCallback? onDragEnd;
+  final VoidCallback? onSlideStart;
+  final VoidCallback? onSlideEnd;
   final Clip clipBehavior;
   final CarouselSliderController? controller;
 
@@ -125,28 +125,40 @@ class _CarouselSliderState extends State<CarouselSlider> {
     return Stack(
       children: <Widget>[
         if (widget.itemCount > 0)
-          PageView.builder(
-            onPageChanged: (val) {
-              widget.onSlideChanged?.call(val);
+
+          ///Notification Listener added in order to capture Slide Start and Slide End events
+          NotificationListener<ScrollNotification>(
+            onNotification: (notification) {
+              if (notification is ScrollStartNotification) {
+                widget.onSlideStart!.call();
+              } else if (notification is ScrollEndNotification) {
+                widget.onSlideEnd!.call();
+              }
+              return true;
             },
-            clipBehavior: widget.clipBehavior,
-            scrollBehavior: ScrollConfiguration.of(context).copyWith(
-              scrollbars: false,
-              overscroll: false,
-              dragDevices: {PointerDeviceKind.touch, PointerDeviceKind.mouse},
+            child: PageView.builder(
+              onPageChanged: (val) {
+                widget.onSlideChanged?.call(val);
+              },
+              clipBehavior: widget.clipBehavior,
+              scrollBehavior: ScrollConfiguration.of(context).copyWith(
+                scrollbars: false,
+                overscroll: false,
+                dragDevices: {PointerDeviceKind.touch, PointerDeviceKind.mouse},
+              ),
+              itemCount: widget.unlimitedMode ? _kMaxValue : widget.itemCount,
+              controller: _pageController,
+              scrollDirection: widget.scrollDirection,
+              physics: widget.scrollPhysics,
+              itemBuilder: (context, index) {
+                final slideIndex = index % widget.itemCount;
+                Widget slide = widget.children == null
+                    ? widget.slideBuilder!(slideIndex)
+                    : widget.children![slideIndex];
+                return widget.slideTransform.transform(context, slide, index,
+                    _currentPage, _pageDelta, widget.itemCount);
+              },
             ),
-            itemCount: widget.unlimitedMode ? _kMaxValue : widget.itemCount,
-            controller: _pageController,
-            scrollDirection: widget.scrollDirection,
-            physics: widget.scrollPhysics,
-            itemBuilder: (context, index) {
-              final slideIndex = index % widget.itemCount;
-              Widget slide = widget.children == null
-                  ? widget.slideBuilder!(slideIndex)
-                  : widget.children![slideIndex];
-              return widget.slideTransform.transform(context, slide, index,
-                  _currentPage, _pageDelta, widget.itemCount);
-            },
           ),
         if (widget.slideIndicator != null && widget.itemCount > 0)
           widget.slideIndicator!.build(
@@ -200,13 +212,7 @@ class _CarouselSliderState extends State<CarouselSlider> {
           : _currentPage!,
     );
     _pageController!.addListener(() {
-      ///onDragStart and onDragEnd methods are added
       setState(() {
-        if (_currentPage == _pageController!.page!.floor()) {
-          widget.onDragStart!.call();
-        } else {
-          widget.onDragEnd!.call();
-        }
         _currentPage = _pageController!.page!.floor();
         _pageDelta = _pageController!.page! - _pageController!.page!.floor();
       });
