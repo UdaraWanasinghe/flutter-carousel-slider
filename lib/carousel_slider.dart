@@ -9,6 +9,9 @@ import 'package:flutter/rendering.dart';
 import 'carousel_slider_indicators.dart';
 import 'carousel_slider_transforms.dart';
 
+export './carousel_slider_indicators.dart';
+export './carousel_slider_transforms.dart';
+
 const _kMaxValue = 200000000000;
 const _kMiddleValue = 100000;
 
