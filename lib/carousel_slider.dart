@@ -9,7 +9,7 @@ import 'package:flutter/rendering.dart';
 import 'carousel_slider_indicators.dart';
 import 'carousel_slider_transforms.dart';
 
-///Exported other files in order to import at once
+///Exported the other files in order to import at once
 export './carousel_slider_indicators.dart';
 export './carousel_slider_transforms.dart';
 
