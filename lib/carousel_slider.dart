@@ -9,7 +9,7 @@ import 'package:flutter/rendering.dart';
 import 'carousel_slider_indicators.dart';
 import 'carousel_slider_transforms.dart';
 
-///Exported the other files in order to import at once
+/// Exported the other files in order to import at once
 export './carousel_slider_indicators.dart';
 export './carousel_slider_transforms.dart';
 
@@ -35,8 +35,6 @@ class CarouselSlider extends StatefulWidget {
     this.unlimitedMode = false,
     this.initialPage = 0,
     this.onSlideChanged,
-    this.onSlideStart,
-    this.onSlideEnd,
     this.controller,
     this.clipBehavior = Clip.hardEdge,
   })  : slideBuilder = null,
@@ -60,8 +58,6 @@ class CarouselSlider extends StatefulWidget {
     this.unlimitedMode = false,
     this.initialPage = 0,
     this.onSlideChanged,
-    this.onSlideStart,
-    this.onSlideEnd,
     this.controller,
     this.clipBehavior = Clip.hardEdge,
   })  : children = null,
@@ -86,8 +82,6 @@ class CarouselSlider extends StatefulWidget {
   final Axis scrollDirection;
   final int initialPage;
   final ValueChanged<int>? onSlideChanged;
-  final VoidCallback? onSlideStart;
-  final VoidCallback? onSlideEnd;
   final Clip clipBehavior;
   final CarouselSliderController? controller;
 
@@ -135,40 +129,28 @@ class _CarouselSliderState extends State<CarouselSlider> {
     return Stack(
       children: <Widget>[
         if (widget.itemCount > 0)
-
-          ///Notification Listener added in order to capture Slide Start and Slide End events
-          NotificationListener<ScrollNotification>(
-            onNotification: (notification) {
-              if (notification is ScrollStartNotification) {
-                widget.onSlideStart!.call();
-              } else if (notification is ScrollEndNotification) {
-                widget.onSlideEnd!.call();
-              }
-              return true;
+          PageView.builder(
+            onPageChanged: (val) {
+              widget.onSlideChanged?.call(val);
             },
-            child: PageView.builder(
-              onPageChanged: (val) {
-                widget.onSlideChanged?.call(val);
-              },
-              clipBehavior: widget.clipBehavior,
-              scrollBehavior: ScrollConfiguration.of(context).copyWith(
-                scrollbars: false,
-                overscroll: false,
-                dragDevices: {PointerDeviceKind.touch, PointerDeviceKind.mouse},
-              ),
-              itemCount: widget.unlimitedMode ? _kMaxValue : widget.itemCount,
-              controller: _pageController,
-              scrollDirection: widget.scrollDirection,
-              physics: widget.scrollPhysics,
-              itemBuilder: (context, index) {
-                final slideIndex = index % widget.itemCount;
-                Widget slide = widget.children == null
-                    ? widget.slideBuilder!(slideIndex)
-                    : widget.children![slideIndex];
-                return widget.slideTransform.transform(context, slide, index,
-                    _currentPage, _pageDelta, widget.itemCount);
-              },
+            clipBehavior: widget.clipBehavior,
+            scrollBehavior: ScrollConfiguration.of(context).copyWith(
+              scrollbars: false,
+              overscroll: false,
+              dragDevices: {PointerDeviceKind.touch, PointerDeviceKind.mouse},
             ),
+            itemCount: widget.unlimitedMode ? _kMaxValue : widget.itemCount,
+            controller: _pageController,
+            scrollDirection: widget.scrollDirection,
+            physics: widget.scrollPhysics,
+            itemBuilder: (context, index) {
+              final slideIndex = index % widget.itemCount;
+              Widget slide = widget.children == null
+                  ? widget.slideBuilder!(slideIndex)
+                  : widget.children![slideIndex];
+              return widget.slideTransform.transform(context, slide, index,
+                  _currentPage, _pageDelta, widget.itemCount);
+            },
           ),
         if (widget.slideIndicator != null && widget.itemCount > 0)
           widget.slideIndicator!.build(
@@ -214,7 +196,7 @@ class _CarouselSliderState extends State<CarouselSlider> {
 
   void _initPageController() {
     _pageController?.dispose();
-    _pageController = PageController(
+    _pageController = new PageController(
       viewportFraction: widget.viewportFraction,
       keepPage: widget.keepPage,
       initialPage: widget.unlimitedMode
