@@ -9,6 +9,7 @@ import 'package:flutter/rendering.dart';
 import 'carousel_slider_indicators.dart';
 import 'carousel_slider_transforms.dart';
 
+///Exported the other files in order to import at once
 export './carousel_slider_indicators.dart';
 export './carousel_slider_transforms.dart';
 
@@ -112,6 +113,12 @@ class CarouselSliderController {
   setAutoSliderEnabled(bool isEnabled) {
     if (_state != null && _state!.mounted) {
       _state!._setAutoSliderEnabled(isEnabled);
+    }
+  }
+
+  dispose() {
+    if (_state != null && _state!.mounted) {
+      _state!.dispose();
     }
   }
 }
