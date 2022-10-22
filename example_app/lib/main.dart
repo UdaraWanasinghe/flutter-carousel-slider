@@ -1,9 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
-import 'package:flutter_carousel_slider/carousel_slider_indicators.dart';
-import 'package:flutter_carousel_slider/carousel_slider_transforms.dart';
 
 void main() {
   runApp(MyApp());
@@ -164,6 +160,15 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               slideTransform: _slideTransform,
               slideIndicator: _slideIndicator,
+              onSlideChanged: (index) {
+                print("Slide changed: $index");
+              },
+              onSlideStart: () {
+                print("Slide started");
+              },
+              onSlideEnd: () {
+                print("Slide ended");
+              },
             ),
           ),
           Padding(
