@@ -2,7 +2,7 @@
 
 A customizable carousel slider for flutter
 
-[![pub package](https://img.shields.io/badge/pub-v1.0.8-orange)](https://pub.dev/packages/flutter_carousel_slider)
+[![pub package](https://img.shields.io/badge/pub-v1.1.0-orange)](https://pub.dev/packages/flutter_carousel_slider)
 
 ## Screenshots
 
@@ -12,7 +12,7 @@ A customizable carousel slider for flutter
 
 ```
 dependencies:
-  flutter_carousel_slider: ^1.0.8
+  flutter_carousel_slider: ^1.1.0
 ```
 
 ## Demo
@@ -24,8 +24,6 @@ Demo application available at [https://flutter-carousel-slider.web.app/](https:/
 ```dart
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
-import 'package:flutter_carousel_slider/carousel_slider_indicators.dart';
-import 'package:flutter_carousel_slider/carousel_slider_transforms.dart';
 
 void main() {
   runApp(MyApp());
