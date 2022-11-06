@@ -4,12 +4,10 @@ import 'dart:async';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 import 'carousel_slider_indicators.dart';
 import 'carousel_slider_transforms.dart';
 
-///Exported the other files in order to import at once
 export './carousel_slider_indicators.dart';
 export './carousel_slider_transforms.dart';
 
@@ -140,9 +138,9 @@ class _CarouselSliderState extends State<CarouselSlider> {
           NotificationListener<ScrollNotification>(
             onNotification: (notification) {
               if (notification is ScrollStartNotification) {
-                widget.onSlideStart!.call();
+                widget.onSlideStart?.call();
               } else if (notification is ScrollEndNotification) {
-                widget.onSlideEnd!.call();
+                widget.onSlideEnd?.call();
               }
               return true;
             },

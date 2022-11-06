@@ -46,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
     "G",
   ];
 
-  bool _isPlaying = false;
+  bool _isPlaying = true;
 
   CarouselSliderController _sliderController;
 

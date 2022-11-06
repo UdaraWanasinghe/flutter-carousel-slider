@@ -50,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
   SlideIndicator _slideIndicator = CircularSlideIndicator(
     padding: EdgeInsets.only(bottom: 32),
   );
-  bool _isPlaying = false;
+  bool _isPlaying = true;
   CarouselSliderController _sliderController;
 
   @override
@@ -140,6 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
             height: 400,
             child: CarouselSlider.builder(
               initialPage: 0,
+              enableAutoSlider: true,
               unlimitedMode: true,
               controller: _sliderController,
               autoSliderTransitionTime: Duration(seconds: 1),
