@@ -97,7 +97,7 @@ class CarouselSliderController {
   _CarouselSliderState? _state;
 
   void jumpToPage(int pageIndex) {
-    if (pageIndex >= 0 && _state != null) {
+    if (_state != null) {
       return _state!._jumpToPage(pageIndex);
     }
   }
