@@ -96,6 +96,12 @@ class CarouselSlider extends StatefulWidget {
 class CarouselSliderController {
   _CarouselSliderState? _state;
 
+  void jumpToPage(int pageIndex) {
+    if (_state != null) {
+      return _state!._jumpToPage(pageIndex);
+    }
+  }
+
   nextPage([Duration? transitionDuration]) {
     if (_state != null && _state!.mounted) {
       _state!._nextPage(transitionDuration);
@@ -163,14 +169,14 @@ class _CarouselSliderState extends State<CarouselSlider> {
                 Widget slide = widget.children == null
                     ? widget.slideBuilder!(slideIndex)
                     : widget.children![slideIndex];
-                return widget.slideTransform.transform(context, slide, index,
-                    _currentPage, _pageDelta, widget.itemCount);
+                return widget.slideTransform
+                    .transform(context, slide, index, _currentPage, _pageDelta, widget.itemCount);
               },
             ),
           ),
         if (widget.slideIndicator != null && widget.itemCount > 0)
-          widget.slideIndicator!.build(
-              _currentPage! % widget.itemCount, _pageDelta, widget.itemCount),
+          widget.slideIndicator!
+              .build(_currentPage! % widget.itemCount, _pageDelta, widget.itemCount),
       ],
     );
   }
@@ -215,9 +221,8 @@ class _CarouselSliderState extends State<CarouselSlider> {
     _pageController = PageController(
       viewportFraction: widget.viewportFraction,
       keepPage: widget.keepPage,
-      initialPage: widget.unlimitedMode
-          ? _kMiddleValue * widget.itemCount + _currentPage!
-          : _currentPage!,
+      initialPage:
+          widget.unlimitedMode ? _kMiddleValue * widget.itemCount + _currentPage! : _currentPage!,
     );
     _pageController!.addListener(() {
       setState(() {
@@ -253,5 +258,9 @@ class _CarouselSliderState extends State<CarouselSlider> {
         );
       });
     }
+  }
+
+  void _jumpToPage(int pageIndex) {
+    return _pageController!.jumpToPage(pageIndex);
   }
 }
