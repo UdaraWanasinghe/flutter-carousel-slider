@@ -108,6 +108,12 @@ class CarouselSliderController {
     }
   }
 
+  goToPage(int page, {Duration? transitionDuration}) {
+    if (_state != null && _state!.mounted) {
+      _state!._goToPage(page, transitionDuration);
+    }
+  }
+
   setAutoSliderEnabled(bool isEnabled) {
     if (_state != null && _state!.mounted) {
       _state!._setAutoSliderEnabled(isEnabled);
@@ -236,6 +242,14 @@ class _CarouselSliderState extends State<CarouselSlider> {
 
   void _previousPage(Duration? transitionDuration) {
     _pageController!.previousPage(
+      duration: transitionDuration ?? widget.autoSliderTransitionTime,
+      curve: widget.autoSliderTransitionCurve,
+    );
+  }
+
+  void _goToPage(int page, Duration? transitionDuration) {
+    _pageController!.animateToPage(
+      page,
       duration: transitionDuration ?? widget.autoSliderTransitionTime,
       curve: widget.autoSliderTransitionCurve,
     );
