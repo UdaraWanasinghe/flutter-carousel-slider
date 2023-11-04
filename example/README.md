@@ -4,8 +4,6 @@
 ```dart
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
-import 'package:flutter_carousel_slider/carousel_slider_indicators.dart';
-import 'package:flutter_carousel_slider/carousel_slider_transforms.dart';
 
 void main() {
   runApp(MyApp());
@@ -50,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
     "G",
   ];
 
-  bool _isPlaying = false;
+  bool _isPlaying = true;
 
   CarouselSliderController _sliderController;
 
@@ -86,6 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
               slideTransform: CubeTransform(),
               slideIndicator: CircularSlideIndicator(
                 padding: EdgeInsets.only(bottom: 32),
+                indicatorBorderColor: Colors.black,
               ),
               itemCount: colors.length,
               initialPage: 0,
@@ -114,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       onPressed: () {
                         setState(
-                          () {
+                              () {
                             _isPlaying = !_isPlaying;
                             _sliderController.setAutoSliderEnabled(_isPlaying);
                           },

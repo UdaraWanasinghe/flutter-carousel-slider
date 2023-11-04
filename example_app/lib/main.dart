@@ -1,9 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
-import 'package:flutter_carousel_slider/carousel_slider_indicators.dart';
-import 'package:flutter_carousel_slider/carousel_slider_transforms.dart';
 
 void main() {
   runApp(MyApp());
@@ -54,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
   SlideIndicator _slideIndicator = CircularSlideIndicator(
     padding: EdgeInsets.only(bottom: 32),
   );
-  bool _isPlaying = false;
+  bool _isPlaying = true;
   CarouselSliderController _sliderController;
 
   @override
@@ -144,6 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
             height: 400,
             child: CarouselSlider.builder(
               initialPage: 0,
+              enableAutoSlider: true,
               unlimitedMode: true,
               controller: _sliderController,
               autoSliderTransitionTime: Duration(seconds: 1),
@@ -164,6 +161,15 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               slideTransform: _slideTransform,
               slideIndicator: _slideIndicator,
+              onSlideChanged: (index) {
+                print("Slide changed: $index");
+              },
+              onSlideStart: () {
+                print("Slide started");
+              },
+              onSlideEnd: () {
+                print("Slide ended");
+              },
             ),
           ),
           Padding(

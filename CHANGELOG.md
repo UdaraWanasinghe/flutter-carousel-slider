@@ -7,4 +7,5 @@
 ## [1.0.6] - bug fixes
 ## [1.0.7] - Migrated to null safety
 ## [1.0.8] - Improvements
-
+## [1.0.9] - Added onSlideChanged callback, Support clipBehavior parameter, Fixed slide gesture with mouse on web
+## [1.1.0] - Support for onSlideStart and onSlideEnd callbacks. Single import functionality.
